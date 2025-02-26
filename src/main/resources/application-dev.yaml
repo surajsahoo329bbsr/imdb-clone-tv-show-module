@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    # driver-class-code: com.mysql.cj.jdbc.Driver - Required for localhost Db conn
+    max-active: 10
+    max-wait: 10000
+    min-active: 5
+    test-on-borrow: true
+    url: ${DEV_DATABASE_URL}
+    username: ${DEV_DATABASE_USERNAME}
+    password: ${DEV_DATABASE_PWD}
+    validationQuery: SELECT 1
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none # set it to auto for updating schemas regularly
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        boot:
+          allow_jdbc_metadata_access: false
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+hibernate:
+  validator:
+    fail-fast: false

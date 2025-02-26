@@ -1,9 +1,9 @@
 package com.imdbclone.tvshow.repository;
 
-import com.imdbclone.tvshow.entity.TvShowCast;
+import com.imdbclone.tvshow.entity.TvShowSeason;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TvShowCastRepository extends JpaRepository<TvShowCast, Long> {
+public interface TvShowSeasonRepository extends JpaRepository<TvShowSeason, Long> {
 }

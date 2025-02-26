@@ -5,12 +5,12 @@
 ### TV Shows
 
 | HTTP Method | Endpoint           | Description                            | Access Level | Request Body | Response         |
-| ----------- | ------------------ | -------------------------------------- | ------------ | ------------ | ---------------- |
+|-------------| ------------------ | -------------------------------------- | ------------ | ------------ | ---------------- |
 | **GET**     | `/tv-shows`        | Retrieve all TV shows using pagination | Public       | None         | List of TV shows |
 | **GET**     | `/tv-shows/{id}`   | Retrieve a specific TV show by ID      | Public       | None         | TV show details  |
 | **POST**    | `/tv-shows`        | Create a new TV show                   | Admin Only   | TV show data | Created TV show  |
 | **POST**    | `/tv-shows/upload` | Upload a list of TV shows using CSV    | Admin Only   | CSV file     | Status message   |
-| **PUT**     | `/tv-shows/{id}`   | Update a TV show                       | Admin Only   | TV show data | Updated TV show  |
+| **PATCH**   | `/tv-shows/{id}`   | Update a TV show                       | Admin Only   | TV show data | Updated TV show  |
 | **DELETE**  | `/tv-shows/{id}`   | Soft delete a TV show                  | Admin Only   | None         | Status message   |
 
 ### TV Show Cast
@@ -30,7 +30,7 @@
 | ----------- | ------------------------ | ----------------------------------------------- | ------------ | -------------- | -------------- |
 | **GET**     | `/tv-shows/seasons/{id}` | Retrieve a specific TV show season with details | Public       | None           | Season details |
 | **POST**    | `/tv-shows/seasons`      | Create a new TV season                          | Admin Only   | Season details | Created season |
-| **PUT**     | `/tv-shows/seasons/{id}` | Update a TV show season                         | Admin Only   | Season details | Updated season |
+| **PATCH**     | `/tv-shows/seasons/{id}` | Update a TV show season                         | Admin Only   | Season details | Updated season |
 | **DELETE**  | `/tv-shows/seasons/{id}` | Soft delete a TV show season                    | Admin Only   | None           | Status message |
 
 #### TV Show Episodes
@@ -40,7 +40,7 @@
 | **GET**     | `/tv-shows/seasons/episodes`     | Retrieve all TV show episodes       | Public       | None            | List of episodes |
 | **GET**     | `/tv-shows/seasons/episode/{id}` | Retrieve a specific TV show episode | Public       | None            | Episode details  |
 | **POST**    | `/tv-shows/seasons/episode`      | Create a new TV show episode        | Admin Only   | Episode details | Created episode  |
-| **PUT**     | `/tv-shows/seasons/episode/{id}` | Update a TV show episode            | Admin Only   | Episode details | Updated episode  |
+| **PATCH**     | `/tv-shows/seasons/episode/{id}` | Update a TV show episode            | Admin Only   | Episode details | Updated episode  |
 | **DELETE**  | `/tv-shows/seasons/episode/{id}` | Soft delete a TV show episode       | Admin Only   | None            | Status message   |
 
 ## Notes

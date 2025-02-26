@@ -35,6 +35,10 @@ public class TvShowRequest {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(nullable = false)
+    @NotBlank(message = "TV Show's Admin ID cannot be blank")
+    private Long adminId;
+
     private Boolean status;
 
 }

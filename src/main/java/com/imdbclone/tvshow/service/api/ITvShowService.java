@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ITvShowService {
 
-    List<TvShowResponse> getAllTvShows(Integer pageNumber, Integer pageSize, Boolean isSortOrderDescending);
+    List<TvShowResponse> getAllTvShows(Integer pageNumber, Integer pageSize, Boolean sortByLatestFirst);
 
     TvShowResponse getTvShowById(Long id);
 
