@@ -7,13 +7,13 @@ spring:
     test-on-borrow: true
     url: ${DEV_DATABASE_URL}
     username: ${DEV_DATABASE_USERNAME}
-    password: ${DEV_DATABASE_PWD}
+    password: "${DEV_DATABASE_PWD}"
     validationQuery: SELECT 1
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     generate-ddl: false
     hibernate:
-      ddl-auto: none # set it to auto for updating schemas regularly
+      ddl-auto: update # set it to update for updating schemas regularly
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     show-sql: true
     properties:

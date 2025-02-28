@@ -1,10 +1,7 @@
 package com.imdbclone.tvshow.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
@@ -28,7 +25,7 @@ public class TvShow {
     private String title;
 
     @Column(columnDefinition = "DATETIME", nullable = false)
-    @NotBlank(message = "TV Show's release year cannot be blank")
+    @NotNull(message = "TV Show's release year cannot be blank")
     private LocalDateTime releaseYear;
 
     @Column(nullable = false)
@@ -50,11 +47,10 @@ public class TvShow {
 
     @Min(value=1, message = "TV Show's minimum score cannot be less than 1.0")
     @Max(value=10, message = "TV Show's minimum score cannot be more than 10.0")
-    @Column(nullable = false)
     private Float score;
 
     @Column(nullable = false)
-    @NotBlank(message = "TV Show's Admin ID cannot be blank")
+    @NotNull(message = "TV Show's Admin ID cannot be blank")
     private Long adminId;
 
     private Boolean isDeleted;

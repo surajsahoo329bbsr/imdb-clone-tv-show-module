@@ -9,5 +9,4 @@ public class TvShowApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TvShowApplication.class, args);
 	}
-
 }
