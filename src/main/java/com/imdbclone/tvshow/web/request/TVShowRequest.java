@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
-public class TvShowRequest {
+public class TVShowRequest {
 
     @NotBlank(message = "TV Show Request's language cannot be blank")
     private String title;

@@ -28,3 +28,7 @@ spring:
 hibernate:
   validator:
     fail-fast: false
+
+logging:
+  level:
+    root: info

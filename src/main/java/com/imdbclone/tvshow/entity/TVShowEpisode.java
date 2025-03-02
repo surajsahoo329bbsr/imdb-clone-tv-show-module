@@ -9,13 +9,13 @@ import lombok.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "tv_show_episode")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TvShowEpisode {
+public class TVShowEpisode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

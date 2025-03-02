@@ -8,13 +8,13 @@ import org.hibernate.validator.constraints.URL;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "tv_show")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TvShow {
+public class TVShow {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -17,7 +17,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 //.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/tv-shows/**")
+                        .requestMatchers("/tv-shows/**", "/ws/**")
                         .permitAll()
                         .anyRequest().authenticated())
                 .formLogin(AbstractHttpConfigurer::disable);

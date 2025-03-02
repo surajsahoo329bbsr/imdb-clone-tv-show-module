@@ -7,13 +7,13 @@ import lombok.*;
 
 import java.time.Instant;
 
-@Entity
+@Entity(name = "tv_show_cast")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TvShowCast {
+public class TVShowCast {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

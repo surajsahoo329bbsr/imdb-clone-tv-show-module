@@ -1,6 +1,5 @@
 package com.imdbclone.tvshow.web.request;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -8,7 +7,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class TvShowCastRequest {
+public class TVShowCastRequest {
 
     @NotBlank(message = "TV Show Cast's TV Show ID cannot be blank")
     private Long tvShowId;

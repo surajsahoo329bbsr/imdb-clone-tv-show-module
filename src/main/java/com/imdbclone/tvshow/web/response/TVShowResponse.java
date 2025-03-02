@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
-public class TvShowResponse {
+public class TVShowResponse {
 
     private Long id;
 

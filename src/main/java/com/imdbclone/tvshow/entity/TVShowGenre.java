@@ -9,9 +9,9 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@IdClass(TvShowGenreKey.class)
-public class TvShowGenre {
+@Entity(name = "tv_show_genre")
+@IdClass(TVShowGenreKey.class)
+public class TVShowGenre {
 
     @Id
     @Column(nullable = false)

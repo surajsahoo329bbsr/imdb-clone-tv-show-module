@@ -2,13 +2,13 @@ package com.imdbclone.tvshow.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class TvShowGenreKey implements Serializable {
+public class TVShowGenreKey implements Serializable {
     private Long tvShowId;
     private Long genreId;
 
-    public TvShowGenreKey() {}
+    public TVShowGenreKey() {}
 
-    public TvShowGenreKey(Long tvShowId, Long genreId) {
+    public TVShowGenreKey(Long tvShowId, Long genreId) {
         this.tvShowId = tvShowId;
         this.genreId = genreId;
     }
@@ -17,7 +17,7 @@ public class TvShowGenreKey implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TvShowGenreKey that = (TvShowGenreKey) o;
+        TVShowGenreKey that = (TVShowGenreKey) o;
         return Objects.equals(tvShowId, that.tvShowId) && Objects.equals(genreId, that.genreId);
     }
 
