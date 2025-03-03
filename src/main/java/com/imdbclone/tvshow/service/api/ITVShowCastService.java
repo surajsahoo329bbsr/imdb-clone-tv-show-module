@@ -12,8 +12,8 @@ public interface ITVShowCastService {
 
     void addTVShowCast(TVShowCastRequest tvShowCastRequest);
 
-    TVShowCastResponse updateTVShowCast(TVShowCastUpdateRequest tvShowCastUpdateRequest);
+    TVShowCastResponse updateTVShowCast(Long castId, TVShowCastUpdateRequest tvShowCastUpdateRequest);
 
-    void deleteTVShowCastById(Long tvShowCastId);
+    void deleteTVShowCastById(Long castId);
 
 }

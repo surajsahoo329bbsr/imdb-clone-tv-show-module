@@ -8,7 +8,8 @@ import org.hibernate.validator.constraints.URL;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
-@Entity(name = "tv_show")
+@Entity
+@Table(name = "tv_show")
 @Getter
 @Setter
 @NoArgsConstructor

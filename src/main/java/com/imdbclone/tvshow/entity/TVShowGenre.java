@@ -9,7 +9,8 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "tv_show_genre")
+@Entity
+@Table(name = "tv_show_genre")
 @IdClass(TVShowGenreKey.class)
 public class TVShowGenre {
 

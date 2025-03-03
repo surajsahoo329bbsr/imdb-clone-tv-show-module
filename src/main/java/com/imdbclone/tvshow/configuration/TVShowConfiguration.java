@@ -14,12 +14,12 @@ import org.springframework.context.annotation.Configuration;
 public class TVShowConfiguration<T> {
 
     @Bean
-    public ITVShowService tvShowService(TVShowRepository tvShowRepository, CSVProcessor<T> csvProcessor){
-        return new TVShowServiceImpl(tvShowRepository, csvProcessor);
+    public ITVShowService tvShowService(TVShowRepository tvShowRepository, CSVProcessor<T> csvProcessor) {
+        return new TVShowServiceImpl<>(tvShowRepository, csvProcessor);
     }
 
     @Bean
-    public ITVShowCastService tvShowCastService(TVShowCastRepository tvShowCastRepository){
+    public ITVShowCastService tvShowCastService(TVShowCastRepository tvShowCastRepository) {
         return new TVShowCastServiceImpl(tvShowCastRepository);
     }
 

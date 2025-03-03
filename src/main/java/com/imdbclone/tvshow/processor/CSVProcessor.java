@@ -28,7 +28,6 @@ import java.util.function.Function;
 @Slf4j
 public class CSVProcessor<T> {
 
-    private final Map<UUID, AtomicInteger> csvProgressMap = new ConcurrentHashMap<>();
     private final ExecutorService executorService = Executors.newFixedThreadPool(5);
 
     @Autowired
@@ -40,7 +39,6 @@ public class CSVProcessor<T> {
             throw new RuntimeException("File is Empty");
         }
         UUID uploadId = UUID.randomUUID();
-        csvProgressMap.put(uploadId, new AtomicInteger(0));
         executorService.submit(() -> parseAndStoreCSV(multipartFile, uploadId, mapper, saveFunction));
         return uploadId;
     }
@@ -49,8 +47,13 @@ public class CSVProcessor<T> {
     private <E> void parseAndStoreCSV(MultipartFile multipartFile, UUID uploadId, Function<CSVRecord, E> mapper, Consumer<List<E>> saveFunction) {
         List<E> entities = new ArrayList<>();
 
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(multipartFile.getInputStream()));
-             CSVParser csvParser = new CSVParser(bufferedReader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+        try (
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(multipartFile.getInputStream()));
+                CSVParser csvParser = new CSVParser(bufferedReader, CSVFormat.DEFAULT.builder()
+                        .setHeader()
+                        .setSkipHeaderRecord(true)
+                        .build())
+        ) {
 
             List<CSVRecord> csvRecords = csvParser.getRecords();
             int totalRecords = csvRecords.size();
@@ -78,8 +81,6 @@ public class CSVProcessor<T> {
 
         } catch (Exception e) {
             log.error("CSV Error while processing : {} ", e.getMessage());
-        } finally {
-            csvProgressMap.remove(uploadId);
         }
     }
 
@@ -88,12 +89,6 @@ public class CSVProcessor<T> {
         int percentage = (int) ((processed * 100.0) / total);
         AtomicInteger uploadPercentage = new AtomicInteger(percentage);
         progressWebSocketHandler.sendProgressUpdate(uploadId, uploadPercentage);
-        csvProgressMap.put(uploadId, uploadPercentage);
-    }
-
-    public int getProgress(UUID uploadId) {
-        return csvProgressMap
-                .getOrDefault(uploadId, new AtomicInteger(-1)).get();
     }
 
 }

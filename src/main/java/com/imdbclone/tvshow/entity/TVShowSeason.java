@@ -9,7 +9,8 @@ import lombok.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
-@Entity(name = "tv_show_season")
+@Entity
+@Table(name = "tv_show_season")
 @Getter
 @Setter
 @Builder

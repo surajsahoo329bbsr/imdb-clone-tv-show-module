@@ -10,7 +10,7 @@ import lombok.Getter;
 @Builder
 public class TVShowCastResponse {
 
-    private Long id;
+    private Long castId;
 
     private Long tvShowId;
 

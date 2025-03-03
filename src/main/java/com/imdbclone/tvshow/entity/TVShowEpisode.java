@@ -9,7 +9,8 @@ import lombok.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
-@Entity(name = "tv_show_episode")
+@Entity
+@Table(name = "tv_show_episode")
 @Getter
 @Setter
 @Builder
@@ -40,8 +41,8 @@ public class TVShowEpisode {
     @Column(nullable = false)
     private LocalDateTime releaseDate;
 
-    @Min(value=1, message = "TV Show Episode's minimum score cannot be less than 1.0")
-    @Max(value=10, message = "TV Show Episode's minimum score cannot be more than 10.0")
+    @Min(value = 1, message = "TV Show Episode's minimum score cannot be less than 1.0")
+    @Max(value = 10, message = "TV Show Episode's minimum score cannot be more than 10.0")
     private Float score;
 
     private Boolean isDeleted;

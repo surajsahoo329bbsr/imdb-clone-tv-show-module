@@ -40,21 +40,19 @@ public class TVShowServiceImpl<T> implements ITVShowService {
                     Sort.by("id").ascending();
             Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
             Page<TVShow> page = tvShowRepository.findAll(pageable);
-            return
-                    page
-                            .stream()
-                            .map(tvShow -> new TVShowResponse(
-                                    tvShow.getId(),
-                                    tvShow.getTitle(),
-                                    tvShow.getReleaseYear(),
-                                    tvShow.getLanguage(),
-                                    tvShow.getSeasonsCount(),
-                                    tvShow.getScore(),
-                                    tvShow.getPosterUrl(),
-                                    tvShow.getDescription(),
-                                    tvShow.getStatus()
-                            ))
-                            .toList();
+            return page.stream()
+                    .map(tvShow -> new TVShowResponse(
+                            tvShow.getId(),
+                            tvShow.getTitle(),
+                            tvShow.getReleaseYear(),
+                            tvShow.getLanguage(),
+                            tvShow.getSeasonsCount(),
+                            tvShow.getScore(),
+                            tvShow.getPosterUrl(),
+                            tvShow.getDescription(),
+                            tvShow.getStatus()
+                    ))
+                    .toList();
         } catch (IllegalArgumentException e) {
             //throw new CustomBadRequestException("Invalid pagination parameters: " + e.getMessage());
         } catch (DataAccessException e) {

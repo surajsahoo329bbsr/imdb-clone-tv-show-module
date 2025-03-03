@@ -8,9 +8,10 @@ import lombok.Getter;
 @Getter
 public class TVShowCastUpdateRequest {
 
-    @NotBlank(message = "TV Show Cast ID cannot be blank")
-    private Long castId;
+    @NotBlank(message = "TV Show ID cannot be blank")
+    private Long tvShowId;
 
+    @NotBlank(message = "TV Show Person ID cannot be blank")
     private Long personId;
 
     private Integer seasonNumber;

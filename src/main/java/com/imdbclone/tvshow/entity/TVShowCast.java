@@ -7,7 +7,8 @@ import lombok.*;
 
 import java.time.Instant;
 
-@Entity(name = "tv_show_cast")
+@Entity
+@Table(name = "tv_show_cast")
 @Getter
 @Setter
 @Builder
