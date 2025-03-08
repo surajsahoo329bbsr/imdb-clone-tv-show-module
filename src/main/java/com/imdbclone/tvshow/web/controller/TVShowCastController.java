@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(name = "/tv-shows")
+@RequestMapping(path = "/tv-shows")
 public class TVShowCastController {
 
     @Autowired
@@ -25,7 +25,7 @@ public class TVShowCastController {
         return new ResponseEntity<>(tvShowCastResponses, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/cast", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/cast", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addTVShowCast(@RequestBody TVShowCastRequest tvShowCastRequest) {
         tvShowCastService.addTVShowCast(tvShowCastRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -37,7 +37,7 @@ public class TVShowCastController {
         return new ResponseEntity<>(tvShowCastResponse, HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping(path = "/cast/{id}/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(path = "/cast/{id}/delete")
     public ResponseEntity<?> deleteTVShowCastById(@PathVariable(name = "id") Long castId) {
         tvShowCastService.deleteTVShowCastById(castId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

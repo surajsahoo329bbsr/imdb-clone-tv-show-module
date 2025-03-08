@@ -23,7 +23,7 @@ public class TVShowController {
     private ITVShowService tvShowService;
 
     @GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllTVShows(@RequestParam(defaultValue = "1") @Positive Integer pageNumber, @RequestParam(defaultValue = "10") @Positive Integer pageSize, @RequestParam(defaultValue = "false") Boolean sortByLatestFirst) {
+    public ResponseEntity<?> getAllTVShows(@RequestParam(defaultValue = "1") @Positive Integer pageNumber, @RequestParam(defaultValue = "10") @Positive Integer pageSize, @RequestParam(defaultValue = "false") boolean sortByLatestFirst) {
         List<TVShowResponse> tvShows = tvShowService.getAllTVShows(pageNumber, pageSize, sortByLatestFirst);
         return new ResponseEntity<>(tvShows, HttpStatus.OK);
     }
@@ -52,7 +52,7 @@ public class TVShowController {
         return new ResponseEntity<>(tvShow, HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteTVShowById(@PathVariable(name = "id") Long tvShowId) {
         tvShowService.deleteTVShowById(tvShowId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

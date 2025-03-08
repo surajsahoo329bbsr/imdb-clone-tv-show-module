@@ -25,6 +25,6 @@ public class TVShowResponse {
 
     private String description;
 
-    private Boolean status;
+    private boolean status;
 
 }

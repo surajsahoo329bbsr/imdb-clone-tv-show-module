@@ -76,7 +76,7 @@ public class TVShowCastServiceImpl implements ITVShowCastService {
 
         TVShowCast tvShowCast = tvShowCastRepository
                 .findById(castId)
-                .filter(filterTVShowCast -> !filterTVShowCast.getIsDeleted())
+                .filter(filterTVShowCast -> !filterTVShowCast.isDeleted())
                 .orElseThrow(() -> new EntityNotFoundException("TV Show Cast entry not found"));
 
         tvShowCast.setPersonId(tvShowCastUpdateRequest.getPersonId());
@@ -99,10 +99,10 @@ public class TVShowCastServiceImpl implements ITVShowCastService {
     @Override
     public void deleteTVShowCastById(Long castId) {
         TVShowCast tvShowCast = tvShowCastRepository.findById(castId)
-                .filter(cast -> cast.getIsDeleted() == null || !cast.getIsDeleted()) // Skip already deleted records
+                .filter(cast -> !cast.isDeleted()) // Skip already deleted records
                 .orElseThrow(() -> new EntityNotFoundException("TV Show Cast ID " + castId + " is unavailable"));
 
-        tvShowCast.setIsDeleted(true);
+        tvShowCast.setDeleted(true);
         tvShowCast.setDeletedAt(Instant.now());
 
         tvShowCastRepository.save(tvShowCast);

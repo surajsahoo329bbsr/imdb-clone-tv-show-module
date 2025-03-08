@@ -34,7 +34,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
     }
 
     @Override
-    public List<TVShowResponse> getAllTVShows(Integer pageNumber, Integer pageSize, Boolean sortByLatestFirst) {
+    public List<TVShowResponse> getAllTVShows(Integer pageNumber, Integer pageSize, boolean sortByLatestFirst) {
         try {
             Sort sort = sortByLatestFirst ? Sort.by("id").descending() :
                     Sort.by("id").ascending();
@@ -50,7 +50,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
                             tvShow.getScore(),
                             tvShow.getPosterUrl(),
                             tvShow.getDescription(),
-                            tvShow.getStatus()
+                            tvShow.isStatus()
                     ))
                     .toList();
         } catch (IllegalArgumentException e) {
@@ -75,7 +75,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
                         tvShow.getScore(),
                         tvShow.getPosterUrl(),
                         tvShow.getDescription(),
-                        tvShow.getStatus()))
+                        tvShow.isStatus()))
                 .orElse(null);
 
     }
@@ -90,7 +90,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
                 .seasonsCount(tvShowRequest.getSeasonsCount())
                 .posterUrl(tvShowRequest.getPosterUrl())
                 .description(tvShowRequest.getDescription())
-                .status(tvShowRequest.getStatus())
+                .status(tvShowRequest.isStatus())
                 .adminId(tvShowRequest.getAdminId())
                 .build();
         return tvShowRepository.save(tvShow);
@@ -120,7 +120,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
     @Transactional
     public TVShow updateTVShowById(Long id, TVShowRequest tvShowRequest) {
         TVShow tvShow = tvShowRepository.findById(id)
-                .filter(tv -> tv.getIsDeleted() == null || !tv.getIsDeleted()) // Skip deleted TV shows
+                .filter(tv -> !tv.isDeleted()) // Skip deleted TV shows
                 .orElseThrow(() -> new EntityNotFoundException("TV Show not found with ID: " + id));
 
         // Update only non-null values
@@ -138,7 +138,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
                 .ifPresent(tvShow::setDescription);
         Optional.ofNullable(tvShowRequest.getAdminId())
                 .ifPresent(tvShow::setAdminId);
-        Optional.ofNullable(tvShowRequest.getStatus())
+        Optional.of(tvShowRequest.isStatus())
                 .ifPresent(tvShow::setStatus);
 
         return tvShowRepository.save(tvShow);
@@ -148,10 +148,10 @@ public class TVShowServiceImpl<T> implements ITVShowService {
     @Transactional
     public void deleteTVShowById(Long id) {
         TVShow tvShow = tvShowRepository.findById(id)
-                .filter(tv -> tv.getIsDeleted() == null || !tv.getIsDeleted()) // Skip already deleted records
+                .filter(tv -> !tv.isDeleted()) // Skip already deleted records
                 .orElseThrow(() -> new EntityNotFoundException("TV Show ID " + id + " is unavailable"));
 
-        tvShow.setIsDeleted(true);
+        tvShow.setDeleted(true);
         tvShow.setDeletedAt(Instant.now());
 
         tvShowRepository.save(tvShow);

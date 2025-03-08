@@ -1,7 +1,7 @@
 package com.imdbclone.tvshow.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -16,11 +16,11 @@ public class TVShowGenre {
 
     @Id
     @Column(nullable = false)
-    @NotBlank(message = "TV Show Genre's TV Show ID cannot be blank")
+    @NotNull(message = "TV Show Genre's TV Show ID cannot be blank")
     public Long tvShowId;
 
     @Id
     @Column(nullable = false)
-    @NotBlank(message = "TV Show Genre's Genre ID cannot be blank")
+    @NotNull(message = "TV Show Genre's Genre ID cannot be blank")
     private Long genreId;
 }

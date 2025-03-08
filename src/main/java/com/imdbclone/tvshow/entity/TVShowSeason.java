@@ -1,7 +1,6 @@
 package com.imdbclone.tvshow.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
@@ -23,7 +22,7 @@ public class TVShowSeason {
     private Long id;
 
     @Column(nullable = false)
-    @NotBlank(message = "TV Show Season's TV Show ID cannot be blank")
+    @NotNull(message = "TV Show Season's TV Show ID cannot be blank")
     private Long tvShowId;
 
     @Column(nullable = false)
@@ -41,7 +40,7 @@ public class TVShowSeason {
     @NotNull(message = "TV Show Season's release year cannot be blank")
     private LocalDateTime releaseYear;
 
-    private Boolean isDeleted;
+    private boolean isDeleted = false;
 
     @Column(columnDefinition = "TIMESTAMP")
     private Instant deletedAt;

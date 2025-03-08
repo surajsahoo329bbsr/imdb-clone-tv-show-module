@@ -44,7 +44,7 @@ public class TVShow {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private Boolean status;
+    private boolean status = false;
 
     @Min(value=1, message = "TV Show's minimum score cannot be less than 1.0")
     @Max(value=10, message = "TV Show's minimum score cannot be more than 10.0")
@@ -54,7 +54,7 @@ public class TVShow {
     @NotNull(message = "TV Show's Admin ID cannot be blank")
     private Long adminId;
 
-    private Boolean isDeleted;
+    private boolean isDeleted = false;
 
     @Column(columnDefinition = "TIMESTAMP")
     private Instant deletedAt;

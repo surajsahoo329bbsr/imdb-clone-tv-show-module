@@ -1,6 +1,7 @@
 package com.imdbclone.tvshow.web.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +10,10 @@ import lombok.Getter;
 @Getter
 public class TVShowCastRequest {
 
-    @NotBlank(message = "TV Show Cast's TV Show ID cannot be blank")
+    @NotNull(message = "TV Show Cast's TV Show ID cannot be blank")
     private Long tvShowId;
 
-    @NotBlank(message = "TV Show Cast's person ID cannot be blank")
+    @NotNull(message = "TV Show Cast's person ID cannot be blank")
     private Long personId;
 
     @Positive(message = "TV Show Cast's total seasons must be a positive number")

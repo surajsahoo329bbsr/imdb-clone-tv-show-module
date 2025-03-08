@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface ITVShowService {
 
-    List<TVShowResponse> getAllTVShows(Integer pageNumber, Integer pageSize, Boolean sortByLatestFirst);
+    List<TVShowResponse> getAllTVShows(Integer pageNumber, Integer pageSize, boolean sortByLatestFirst);
 
     TVShowResponse getTVShowById(Long id);
 

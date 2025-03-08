@@ -33,6 +33,6 @@ public class TVShowRequest {
     @NotNull(message = "TV Show's Admin ID cannot be blank")
     private Long adminId;
 
-    private Boolean status;
+    private boolean status;
 
 }

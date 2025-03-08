@@ -45,7 +45,7 @@ public class TVShowEpisode {
     @Max(value = 10, message = "TV Show Episode's minimum score cannot be more than 10.0")
     private Float score;
 
-    private Boolean isDeleted;
+    private boolean isDeleted = false;
 
     @Column(columnDefinition = "TIMESTAMP")
     private Instant deletedAt;

@@ -2,6 +2,7 @@ package com.imdbclone.tvshow.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
@@ -21,11 +22,11 @@ public class TVShowCast {
     private Long id;
 
     @Column(nullable = false)
-    @NotBlank(message = "TV Show Cast's TV Show ID cannot be blank")
+    @NotNull(message = "TV Show Cast's TV Show ID cannot be blank")
     private Long tvShowId;
 
     @Column(nullable = false)
-    @NotBlank(message = "TV Show Cast's person ID cannot be blank")
+    @NotNull(message = "TV Show Cast's person ID cannot be blank")
     private Long personId;
 
     @Column(nullable = false)
@@ -38,7 +39,7 @@ public class TVShowCast {
 
     private String roleType;
 
-    private Boolean isDeleted;
+    private boolean isDeleted = false;
 
     @Column(columnDefinition = "TIMESTAMP")
     private Instant deletedAt;
