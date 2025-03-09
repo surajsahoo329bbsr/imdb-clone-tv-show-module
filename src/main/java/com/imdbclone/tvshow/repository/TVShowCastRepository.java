@@ -12,6 +12,6 @@ import java.util.List;
 public interface TVShowCastRepository extends JpaRepository<TVShowCast, Long> {
 
     //Using JPQL instead of native Hibernate Queries as it has control of all POJO entities and is independent of any Db tables
-    @Query("SELECT t FROM TVShowCast t WHERE t.tvShowId = :tvShowId AND t.isDeleted = false")
-    List<TVShowCast> findTVShowCastByTVShowId(@Param("tvShowId") Long tvShowId);
+    @Query("SELECT t FROM TVShowCast t WHERE t.showId = :showId AND t.isDeleted = false")
+    List<TVShowCast> findTVShowCastByShowId(@Param("showId") Long showId);
 }

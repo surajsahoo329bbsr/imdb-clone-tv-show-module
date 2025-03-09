@@ -23,7 +23,7 @@ public class TVShowEpisode {
     private Long id;
 
     @Column(nullable = false)
-    private Long tvShowSeasonId;
+    private Long seasonId;
 
     @Column(nullable = false)
     private Integer episodeNumber;

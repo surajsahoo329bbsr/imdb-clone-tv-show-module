@@ -23,7 +23,7 @@ public class TVShowCast {
 
     @Column(nullable = false)
     @NotNull(message = "TV Show Cast's TV Show ID cannot be blank")
-    private Long tvShowId;
+    private Long showId;
 
     @Column(nullable = false)
     @NotNull(message = "TV Show Cast's person ID cannot be blank")

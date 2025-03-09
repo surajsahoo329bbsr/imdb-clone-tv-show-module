@@ -29,15 +29,15 @@ public class TVShowController {
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getTVShowById(@PathVariable(name = "id") Long tvShowId) {
-        TVShowResponse tvShowResponse = tvShowService.getTVShowById(tvShowId);
+    public ResponseEntity<?> getTVShowById(@PathVariable(name = "id") Long showId) {
+        TVShowResponse tvShowResponse = tvShowService.getTVShowById(showId);
         return new ResponseEntity<>(tvShowResponse, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addTVShow(@RequestBody TVShowRequest tvShowRequest) {
-        TVShow tvShow = tvShowService.addTVShow(tvShowRequest);
-        return new ResponseEntity<>(tvShow, HttpStatus.CREATED);
+        tvShowService.addTVShow(tvShowRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping(path = "/upload/{adminId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,8 +53,8 @@ public class TVShowController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deleteTVShowById(@PathVariable(name = "id") Long tvShowId) {
-        tvShowService.deleteTVShowById(tvShowId);
+    public ResponseEntity<?> deleteTVShowById(@PathVariable(name = "id") Long showId) {
+        tvShowService.deleteTVShowById(showId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

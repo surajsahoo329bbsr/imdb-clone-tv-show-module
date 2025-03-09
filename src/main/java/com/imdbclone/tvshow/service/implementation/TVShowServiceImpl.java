@@ -82,7 +82,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
 
     @Override
     @Transactional
-    public TVShow addTVShow(TVShowRequest tvShowRequest) {
+    public void addTVShow(TVShowRequest tvShowRequest) {
         TVShow tvShow = TVShow.builder()
                 .title(tvShowRequest.getTitle())
                 .releaseYear(tvShowRequest.getReleaseYear())
@@ -93,7 +93,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
                 .status(tvShowRequest.isStatus())
                 .adminId(tvShowRequest.getAdminId())
                 .build();
-        return tvShowRepository.save(tvShow);
+        tvShowRepository.save(tvShow);
     }
 
     @Override

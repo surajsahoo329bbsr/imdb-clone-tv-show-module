@@ -11,7 +11,7 @@ import lombok.Getter;
 public class TVShowCastRequest {
 
     @NotNull(message = "TV Show Cast's TV Show ID cannot be blank")
-    private Long tvShowId;
+    private Long showId;
 
     @NotNull(message = "TV Show Cast's person ID cannot be blank")
     private Long personId;

@@ -14,7 +14,7 @@ public interface ITVShowService {
 
     TVShowResponse getTVShowById(Long id);
 
-    TVShow addTVShow(TVShowRequest tvShowRequest);
+    void addTVShow(TVShowRequest tvShowRequest);
 
     UUID uploadTVShows(Long adminId, MultipartFile tvShowsCsvFile);
 

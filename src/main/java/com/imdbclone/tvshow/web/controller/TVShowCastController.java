@@ -2,7 +2,6 @@ package com.imdbclone.tvshow.web.controller;
 
 import com.imdbclone.tvshow.service.api.ITVShowCastService;
 import com.imdbclone.tvshow.web.request.TVShowCastRequest;
-import com.imdbclone.tvshow.web.request.TVShowCastUpdateRequest;
 import com.imdbclone.tvshow.web.response.TVShowCastResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +19,8 @@ public class TVShowCastController {
     private ITVShowCastService tvShowCastService;
 
     @GetMapping(path = "/{id}/cast", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getTVShowCastsByTVShowId(@PathVariable(name = "id") Long tvShowId) {
-        List<TVShowCastResponse> tvShowCastResponses = tvShowCastService.getCastByTVShowId(tvShowId);
+    public ResponseEntity<?> getTVShowCastsByShowId(@PathVariable(name = "id") Long showId) {
+        List<TVShowCastResponse> tvShowCastResponses = tvShowCastService.getCastByShowId(showId);
         return new ResponseEntity<>(tvShowCastResponses, HttpStatus.OK);
     }
 
@@ -32,8 +31,8 @@ public class TVShowCastController {
     }
 
     @PatchMapping(path = "/cast/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateTVShowCastById(@PathVariable(name = "id") Long castId, @RequestBody TVShowCastUpdateRequest tvShowCastUpdateRequest) {
-        TVShowCastResponse tvShowCastResponse = tvShowCastService.updateTVShowCast(castId, tvShowCastUpdateRequest);
+    public ResponseEntity<?> updateTVShowCastById(@PathVariable(name = "id") Long castId, @RequestBody TVShowCastRequest tvShowCastRequest) {
+        TVShowCastResponse tvShowCastResponse = tvShowCastService.updateTVShowCast(castId, tvShowCastRequest);
         return new ResponseEntity<>(tvShowCastResponse, HttpStatus.ACCEPTED);
     }
 

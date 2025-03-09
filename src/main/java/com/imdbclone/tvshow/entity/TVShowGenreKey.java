@@ -3,13 +3,13 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TVShowGenreKey implements Serializable {
-    private Long tvShowId;
+    private Long showId;
     private Long genreId;
 
     public TVShowGenreKey() {}
 
-    public TVShowGenreKey(Long tvShowId, Long genreId) {
-        this.tvShowId = tvShowId;
+    public TVShowGenreKey(Long showId, Long genreId) {
+        this.showId = showId;
         this.genreId = genreId;
     }
 
@@ -18,11 +18,11 @@ public class TVShowGenreKey implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TVShowGenreKey that = (TVShowGenreKey) o;
-        return Objects.equals(tvShowId, that.tvShowId) && Objects.equals(genreId, that.genreId);
+        return Objects.equals(showId, that.showId) && Objects.equals(genreId, that.genreId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tvShowId, genreId);
+        return Objects.hash(showId, genreId);
     }
 }

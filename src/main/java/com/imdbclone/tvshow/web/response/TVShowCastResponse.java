@@ -12,7 +12,7 @@ public class TVShowCastResponse {
 
     private Long castId;
 
-    private Long tvShowId;
+    private Long showId;
 
     private TVShowCastPersonDto tvShowCastPersonDto;
 

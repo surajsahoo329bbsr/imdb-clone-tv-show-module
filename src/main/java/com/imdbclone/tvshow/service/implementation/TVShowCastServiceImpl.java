@@ -5,7 +5,6 @@ import com.imdbclone.tvshow.entity.TVShowCast;
 import com.imdbclone.tvshow.repository.TVShowCastRepository;
 import com.imdbclone.tvshow.service.api.ITVShowCastService;
 import com.imdbclone.tvshow.web.request.TVShowCastRequest;
-import com.imdbclone.tvshow.web.request.TVShowCastUpdateRequest;
 import com.imdbclone.tvshow.web.response.TVShowCastResponse;
 import jakarta.persistence.EntityNotFoundException;
 
@@ -23,8 +22,8 @@ public class TVShowCastServiceImpl implements ITVShowCastService {
     }
 
     @Override
-    public List<TVShowCastResponse> getCastByTVShowId(Long tvShowId) {
-        List<TVShowCast> tvShowCasts = tvShowCastRepository.findTVShowCastByTVShowId(tvShowId);
+    public List<TVShowCastResponse> getCastByShowId(Long showId) {
+        List<TVShowCast> tvShowCasts = tvShowCastRepository.findTVShowCastByShowId(showId);
         //RestTemplate restTemplate = new RestTemplate();
         //TVShowCastPersonDto tvShowCastPersonDto = restTemplate.getForObject(null, TVShowCastPersonDto.class);
         TVShowCastPersonDto tvShowCastPersonDummyDto = TVShowCastPersonDto
@@ -40,7 +39,7 @@ public class TVShowCastServiceImpl implements ITVShowCastService {
         return tvShowCasts.stream()
                 .map(tvShowCast -> new TVShowCastResponse(
                         tvShowCast.getId(),
-                        tvShowCast.getTvShowId(),
+                        tvShowCast.getShowId(),
                         tvShowCastPersonDummyDto,
                         tvShowCast.getCharacterName(),
                         tvShowCast.getSeasonNumber(),
@@ -53,7 +52,7 @@ public class TVShowCastServiceImpl implements ITVShowCastService {
     public void addTVShowCast(TVShowCastRequest tvShowCastRequest) {
         TVShowCast tvShowCast =
                 TVShowCast.builder()
-                        .tvShowId(tvShowCastRequest.getTvShowId())
+                        .showId(tvShowCastRequest.getShowId())
                         .personId(tvShowCastRequest.getPersonId())
                         .seasonNumber(tvShowCastRequest.getSeasonNumber())
                         .characterName(tvShowCastRequest.getCharacterName())
@@ -63,7 +62,7 @@ public class TVShowCastServiceImpl implements ITVShowCastService {
     }
 
     @Override
-    public TVShowCastResponse updateTVShowCast(Long castId, TVShowCastUpdateRequest tvShowCastUpdateRequest) {
+    public TVShowCastResponse updateTVShowCast(Long castId, TVShowCastRequest tvShowCastRequest) {
         TVShowCastPersonDto tvShowCastPersonDummyDto = TVShowCastPersonDto
                 .builder()
                 .id(2L)
@@ -79,16 +78,16 @@ public class TVShowCastServiceImpl implements ITVShowCastService {
                 .filter(filterTVShowCast -> !filterTVShowCast.isDeleted())
                 .orElseThrow(() -> new EntityNotFoundException("TV Show Cast entry not found"));
 
-        tvShowCast.setPersonId(tvShowCastUpdateRequest.getPersonId());
-        tvShowCast.setSeasonNumber(tvShowCastUpdateRequest.getSeasonNumber());
-        tvShowCast.setCharacterName(tvShowCastUpdateRequest.getCharacterName());
-        tvShowCast.setRoleType(tvShowCastUpdateRequest.getRoleType());
+        tvShowCast.setPersonId(tvShowCastRequest.getPersonId());
+        tvShowCast.setSeasonNumber(tvShowCastRequest.getSeasonNumber());
+        tvShowCast.setCharacterName(tvShowCastRequest.getCharacterName());
+        tvShowCast.setRoleType(tvShowCastRequest.getRoleType());
 
         TVShowCast updatedCast = tvShowCastRepository.save(tvShowCast);
 
         return TVShowCastResponse.builder()
                 .castId(updatedCast.getId())
-                .tvShowId(updatedCast.getTvShowId())
+                .showId(updatedCast.getShowId())
                 .tvShowCastPersonDto(tvShowCastPersonDummyDto)
                 .characterName(updatedCast.getCharacterName())
                 .seasonNumber(updatedCast.getSeasonNumber())

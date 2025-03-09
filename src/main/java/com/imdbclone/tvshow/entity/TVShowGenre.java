@@ -17,7 +17,7 @@ public class TVShowGenre {
     @Id
     @Column(nullable = false)
     @NotNull(message = "TV Show Genre's TV Show ID cannot be blank")
-    public Long tvShowId;
+    public Long showId;
 
     @Id
     @Column(nullable = false)
