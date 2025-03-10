@@ -38,7 +38,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
         try {
             Sort sort = sortByLatestFirst ? Sort.by("id").descending() :
                     Sort.by("id").ascending();
-            Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+            Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
             Page<TVShow> page = tvShowRepository.findAll(pageable);
             return page.stream()
                     .map(tvShow -> new TVShowResponse(

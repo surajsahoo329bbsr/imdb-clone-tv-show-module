@@ -49,12 +49,12 @@ public class TVShowSeasonServiceImpl implements ITVShowSeasonService {
         Sort sort = sortByLatestFirst ? Sort.by("id").descending() :
                 Sort.by("id").ascending();
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
 
         List<TVShowSeasonResponse> tvShowSeasonResponsesList = tvShowSeasonRepository.findTVShowSeasonsByShowId(showId, pageable)
                 .stream()
                 .map(tvShowSeason -> TVShowSeasonResponse.builder()
-                        //.showId()
+                        .showId(tvShowSeason.getShowId())
                         .seasonId(tvShowSeason.getId())
                         .seasonNumber(tvShowSeason.getSeasonNumber())
                         .totalEpisodes(tvShowSeason.getTotalEpisodes())

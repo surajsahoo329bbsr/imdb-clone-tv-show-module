@@ -30,7 +30,7 @@ public class TVShowSeasonController {
         return new ResponseEntity<>(tvShowWithSeasonsResponse, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/seasons/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/seasons", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addTVShowSeason(@RequestBody TVShowSeasonRequest tvShowSeasonRequest) {
         tvShowSeasonService.addTVShowSeason(tvShowSeasonRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
