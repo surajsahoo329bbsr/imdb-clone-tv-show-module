@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @Builder
 public class TVShowSeasonResponse {
 
-    private Long seasonId;
-
     private Long showId;
+
+    private Long seasonId;
 
     private Integer seasonNumber;
 

@@ -1,21 +1,29 @@
 package com.imdbclone.tvshow.service.implementation;
 
 
+import com.imdbclone.tvshow.entity.TVShow;
 import com.imdbclone.tvshow.entity.TVShowSeason;
+import com.imdbclone.tvshow.repository.TVShowRepository;
 import com.imdbclone.tvshow.repository.TVShowSeasonRepository;
 import com.imdbclone.tvshow.service.api.ITVShowSeasonService;
 import com.imdbclone.tvshow.web.request.TVShowSeasonRequest;
-import com.imdbclone.tvshow.web.response.TVShowSeasonResponse;
+import com.imdbclone.tvshow.web.response.*;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.Instant;
+import java.util.List;
 
 public class TVShowSeasonServiceImpl implements ITVShowSeasonService {
 
+    private final TVShowRepository tvShowRepository;
     private final TVShowSeasonRepository tvShowSeasonRepository;
 
-    public TVShowSeasonServiceImpl(TVShowSeasonRepository tvShowSeasonRepository) {
+    public TVShowSeasonServiceImpl(TVShowSeasonRepository tvShowSeasonRepository, TVShowRepository tvShowRepository) {
         this.tvShowSeasonRepository = tvShowSeasonRepository;
+        this.tvShowRepository = tvShowRepository;
     }
 
     @Override
@@ -30,6 +38,47 @@ public class TVShowSeasonServiceImpl implements ITVShowSeasonService {
                         tvShowSeason.getDescription(),
                         tvShowSeason.getReleaseYear()
                 )).orElse(null);
+    }
+
+    @Override
+    public TVShowWithSeasonsResponse getTVShowSeasonsByShowId(Long showId, Integer pageNumber, Integer pageSize, boolean sortByLatestFirst) {
+        TVShow tvShow = tvShowRepository.findById(showId)
+                .filter(season -> !season.isDeleted())
+                .orElseThrow(() -> new RuntimeException("TV Show Not Found !"));
+
+        Sort sort = sortByLatestFirst ? Sort.by("id").descending() :
+                Sort.by("id").ascending();
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+        List<TVShowSeasonResponse> tvShowSeasonResponsesList = tvShowSeasonRepository.findTVShowSeasonsByShowId(showId, pageable)
+                .stream()
+                .map(tvShowSeason -> TVShowSeasonResponse.builder()
+                        //.showId()
+                        .seasonId(tvShowSeason.getId())
+                        .seasonNumber(tvShowSeason.getSeasonNumber())
+                        .totalEpisodes(tvShowSeason.getTotalEpisodes())
+                        .description(tvShowSeason.getDescription())
+                        .releaseYear(tvShowSeason.getReleaseYear())
+                        .build()
+                )
+                .toList();
+
+        return TVShowWithSeasonsResponse
+                .builder()
+                .tvShowResponse(TVShowResponse.builder()
+                        .id(tvShow.getId())
+                        .title(tvShow.getTitle())
+                        .releaseYear(tvShow.getReleaseYear())
+                        .language(tvShow.getLanguage())
+                        .seasonsCount(tvShow.getSeasonsCount())
+                        .score(tvShow.getScore())
+                        .posterUrl(tvShow.getPosterUrl())
+                        .description(tvShow.getDescription())
+                        .status(tvShow.isStatus())
+                        .build())
+                .tvShowSeasonResponses(tvShowSeasonResponsesList)
+                .build();
     }
 
     @Override

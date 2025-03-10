@@ -2,14 +2,13 @@ package com.imdbclone.tvshow.service.api;
 
 import com.imdbclone.tvshow.web.request.TVShowEpisodeRequest;
 import com.imdbclone.tvshow.web.response.TVShowEpisodeResponse;
-
-import java.util.List;
+import com.imdbclone.tvshow.web.response.TVShowSeasonWithEpisodesResponse;
 
 public interface ITVShowEpisodeService {
 
     TVShowEpisodeResponse getTVShowEpisodeById(Long episodeId);
 
-    List<TVShowEpisodeResponse> getTVShowEpisodesByShowId(Long showId);
+    TVShowSeasonWithEpisodesResponse getTVShowEpisodesBySeasonId(Long seasonId, Integer pageNumber, Integer pageSize, boolean sortByLatestFirst);
 
     void addTVShowEpisode(TVShowEpisodeRequest tvShowEpisodeRequest);
 

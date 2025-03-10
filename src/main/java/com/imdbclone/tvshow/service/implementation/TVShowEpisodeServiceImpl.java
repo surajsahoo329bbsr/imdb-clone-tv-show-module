@@ -1,11 +1,18 @@
 package com.imdbclone.tvshow.service.implementation;
 
 import com.imdbclone.tvshow.entity.TVShowEpisode;
+import com.imdbclone.tvshow.entity.TVShowSeason;
 import com.imdbclone.tvshow.repository.TVShowEpisodeRepository;
+import com.imdbclone.tvshow.repository.TVShowSeasonRepository;
 import com.imdbclone.tvshow.service.api.ITVShowEpisodeService;
 import com.imdbclone.tvshow.web.request.TVShowEpisodeRequest;
 import com.imdbclone.tvshow.web.response.TVShowEpisodeResponse;
+import com.imdbclone.tvshow.web.response.TVShowSeasonResponse;
+import com.imdbclone.tvshow.web.response.TVShowSeasonWithEpisodesResponse;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.Instant;
 import java.util.List;
@@ -13,30 +20,67 @@ import java.util.List;
 public class TVShowEpisodeServiceImpl implements ITVShowEpisodeService {
 
     private final TVShowEpisodeRepository tvShowEpisodeRepository;
+    private final TVShowSeasonRepository tvShowSeasonRepository;
 
-    public TVShowEpisodeServiceImpl(TVShowEpisodeRepository tvShowEpisodeRepository) {
+    public TVShowEpisodeServiceImpl(TVShowEpisodeRepository tvShowEpisodeRepository, TVShowSeasonRepository tvShowSeasonRepository) {
         this.tvShowEpisodeRepository = tvShowEpisodeRepository;
+        this.tvShowSeasonRepository = tvShowSeasonRepository;
     }
 
     @Override
     public TVShowEpisodeResponse getTVShowEpisodeById(Long episodeId) {
         return tvShowEpisodeRepository.findById(episodeId)
                 .filter(episode -> !episode.isDeleted())
-                .map(tvShowEpisode -> new TVShowEpisodeResponse(
-                        tvShowEpisode.getId(),
-                        tvShowEpisode.getSeasonId(),
-                        tvShowEpisode.getEpisodeNumber(),
-                        tvShowEpisode.getTitle(),
-                        tvShowEpisode.getDescription(),
-                        tvShowEpisode.getDuration(),
-                        tvShowEpisode.getReleaseDate(),
-                        tvShowEpisode.getScore()
-                )).orElse(null);
+                .map(tvShowEpisode -> TVShowEpisodeResponse.builder()
+                        .episodeId(tvShowEpisode.getId())
+                        .seasonId(tvShowEpisode.getSeasonId())
+                        .episodeNumber(tvShowEpisode.getEpisodeNumber())
+                        .title(tvShowEpisode.getTitle())
+                        .description(tvShowEpisode.getDescription())
+                        .duration(tvShowEpisode.getDuration())
+                        .releaseDate(tvShowEpisode.getReleaseDate())
+                        .score(tvShowEpisode.getScore())
+                        .build()
+                ).orElse(null);
     }
 
     @Override
-    public List<TVShowEpisodeResponse> getTVShowEpisodesByShowId(Long showId) {
-        return List.of();
+    public TVShowSeasonWithEpisodesResponse getTVShowEpisodesBySeasonId(Long seasonId, Integer pageNumber, Integer pageSize, boolean sortByLatestFirst) {
+        TVShowSeason tvShowSeason = tvShowSeasonRepository.findById(seasonId)
+                .filter(season -> !season.isDeleted())
+                .orElseThrow(() -> new RuntimeException("TV Show Season Not Found !"));
+
+        Sort sort = sortByLatestFirst ? Sort.by("id").descending() :
+                Sort.by("id").ascending();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        List<TVShowEpisodeResponse> tvShowEpisodeResponsesList = tvShowEpisodeRepository.findTVShowEpisodesBySeasonId(seasonId, pageable)
+                .stream()
+                .map(tvShowEpisode -> TVShowEpisodeResponse.builder()
+                        .episodeId(tvShowEpisode.getId())
+                        //.seasonId(tvShowEpisode.getSeasonId())
+                        .episodeNumber(tvShowEpisode.getEpisodeNumber())
+                        .title(tvShowEpisode.getTitle())
+                        .description(tvShowEpisode.getDescription())
+                        .duration(tvShowEpisode.getDuration())
+                        .releaseDate(tvShowEpisode.getReleaseDate())
+                        .score(tvShowEpisode.getScore())
+                        .build())
+                .toList();
+
+        return TVShowSeasonWithEpisodesResponse
+                .builder()
+                .tvShowSeasonResponse(
+                        TVShowSeasonResponse.builder()
+                                .showId(tvShowSeason.getShowId())
+                                .seasonId(tvShowSeason.getId())
+                                .seasonNumber(tvShowSeason.getSeasonNumber())
+                                .totalEpisodes(tvShowSeason.getTotalEpisodes())
+                                .description(tvShowSeason.getDescription())
+                                .releaseYear(tvShowSeason.getReleaseYear())
+                                .build()
+                )
+                .tvShowEpisodeResponses(tvShowEpisodeResponsesList)
+                .build();
     }
 
     @Override
