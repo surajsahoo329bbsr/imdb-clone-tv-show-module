@@ -1,7 +1,9 @@
 package com.imdbclone.tvshow.service.implementation;
 
+import com.imdbclone.tvshow.dto.TVShowWithGenreDTO;
 import com.imdbclone.tvshow.entity.TVShow;
 import com.imdbclone.tvshow.processor.CSVProcessor;
+import com.imdbclone.tvshow.repository.TVShowGenreRepository;
 import com.imdbclone.tvshow.repository.TVShowRepository;
 import com.imdbclone.tvshow.service.api.ITVShowService;
 import com.imdbclone.tvshow.web.response.TVShowResponse;
@@ -17,42 +19,87 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class TVShowServiceImpl<T> implements ITVShowService {
 
     private final TVShowRepository tvShowRepository;
+    private final TVShowGenreRepository tvShowGenreRepository;
     private final CSVProcessor<T> csvProcessor;
+    private final Map<Long, String> genres = Map.ofEntries(
+            Map.entry(1L, "Action"),
+            Map.entry(2L, "Adventure"),
+            Map.entry(3L, "Animation"),
+            Map.entry(4L, "Comedy"),
+            Map.entry(5L, "Crime"),
+            Map.entry(6L, "Documentary"),
+            Map.entry(7L, "Drama"),
+            Map.entry(8L, "Fantasy"),
+            Map.entry(9L, "Historical"),
+            Map.entry(10L, "Horror"),
+            Map.entry(11L, "Mystery"),
+            Map.entry(12L, "Romance"),
+            Map.entry(13L, "Sci-Fi"),
+            Map.entry(14L, "Thriller"),
+            Map.entry(15L, "Supernatural"),
+            Map.entry(16L, "Western"),
+            Map.entry(17L, "Reality-TV"),
+            Map.entry(18L, "Musical"),
+            Map.entry(19L, "War"),
+            Map.entry(20L, "Sports")
+    );
 
-
-    public TVShowServiceImpl(TVShowRepository tvShowRepository, CSVProcessor<T> csvProcessor) {
+    public TVShowServiceImpl(TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository, CSVProcessor<T> csvProcessor) {
         this.tvShowRepository = tvShowRepository;
+        this.tvShowGenreRepository = tvShowGenreRepository;
         this.csvProcessor = csvProcessor;
     }
 
     @Override
-    public List<TVShowResponse> getAllTVShows(Integer pageNumber, Integer pageSize, boolean sortByLatestFirst) {
+    public List<TVShowWithGenreDTO> getAllTVShows(Integer pageNumber, Integer pageSize, boolean sortByLatestFirst) {
         try {
             Sort sort = sortByLatestFirst ? Sort.by("id").descending() :
                     Sort.by("id").ascending();
             Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
-            Page<TVShow> page = tvShowRepository.findAll(pageable);
-            return page.stream()
-                    .map(tvShow -> new TVShowResponse(
-                            tvShow.getId(),
-                            tvShow.getTitle(),
-                            tvShow.getReleaseYear(),
-                            tvShow.getLanguage(),
-                            tvShow.getSeasonsCount(),
-                            tvShow.getScore(),
-                            tvShow.getPosterUrl(),
-                            tvShow.getDescription(),
-                            tvShow.isStatus()
-                    ))
+            Page<Object[]> page = tvShowRepository.findTVShowsWithGenreById(pageable);
+
+            /*List<Long> genreIds = page.stream()
+                    .map(tv -> (Long) tv[9])
                     .toList();
+
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Content-Type", "application/json");
+
+            // Create request entity
+            HttpEntity<List<Long>> requestEntity = new HttpEntity<>(genreIds, headers);
+            Map<Long, String> genres = restTemplate.exchange(
+                            "https://dummyurl.com",
+                            HttpMethod.POST,
+                            requestEntity,
+                            new ParameterizedTypeReference<HashMap<Long, List<String>>>() {
+                            })
+                    .getBody();*/
+
+            //List<TVShowWithGenreDTO> tvShowWithGenreDTOList = new ArrayList<>();
+
+            return page.stream()
+                    .map(tv -> new TVShowWithGenreDTO(
+                            (Long) tv[0],
+                            (String) tv[1],
+                            Collections.singletonList(genres.getOrDefault((Long) tv[2], "Unknown")),
+                            (LocalDateTime) tv[3],
+                            (String) tv[4],
+                            (Integer) tv[5],
+                            (Float) tv[6],
+                            (String) tv[7],
+                            (String) tv[8],
+                            (boolean) tv[9],
+                            (boolean) tv[10]
+                    ))
+                    .filter(tv -> !tv.isDeleted())
+                    .toList();
+
         } catch (IllegalArgumentException e) {
             //throw new CustomBadRequestException("Invalid pagination parameters: " + e.getMessage());
         } catch (DataAccessException e) {
@@ -65,10 +112,16 @@ public class TVShowServiceImpl<T> implements ITVShowService {
 
     @Override
     public TVShowResponse getTVShowById(Long id) {
+
+        List<String> genreList = tvShowGenreRepository.findTVShowGenreByShowId(id).stream()
+                .map(t -> genres.getOrDefault(t.getShowId(), "Unknown"))
+                .toList();
+
         return tvShowRepository.findById(id)
                 .map(tvShow -> new TVShowResponse(
                         tvShow.getId(),
                         tvShow.getTitle(),
+                        genreList,
                         tvShow.getReleaseYear(),
                         tvShow.getLanguage(),
                         tvShow.getSeasonsCount(),

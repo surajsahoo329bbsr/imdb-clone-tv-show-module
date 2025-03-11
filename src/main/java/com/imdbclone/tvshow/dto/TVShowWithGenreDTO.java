@@ -1,4 +1,4 @@
-package com.imdbclone.tvshow.web.response;
+package com.imdbclone.tvshow.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,12 +7,12 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Builder
 @AllArgsConstructor
 @Getter
-@Builder
-public class TVShowResponse {
+public class TVShowWithGenreDTO {
 
-    private Long id;
+    private Long tvShowId;
 
     private String title;
 
@@ -31,5 +31,7 @@ public class TVShowResponse {
     private String description;
 
     private boolean status;
+
+    private boolean isDeleted;
 
 }

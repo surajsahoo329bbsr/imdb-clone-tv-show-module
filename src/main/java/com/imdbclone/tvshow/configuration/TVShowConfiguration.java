@@ -1,10 +1,7 @@
 package com.imdbclone.tvshow.configuration;
 
 import com.imdbclone.tvshow.processor.CSVProcessor;
-import com.imdbclone.tvshow.repository.TVShowCastRepository;
-import com.imdbclone.tvshow.repository.TVShowEpisodeRepository;
-import com.imdbclone.tvshow.repository.TVShowRepository;
-import com.imdbclone.tvshow.repository.TVShowSeasonRepository;
+import com.imdbclone.tvshow.repository.*;
 import com.imdbclone.tvshow.service.api.ITVShowCastService;
 import com.imdbclone.tvshow.service.api.ITVShowEpisodeService;
 import com.imdbclone.tvshow.service.api.ITVShowSeasonService;
@@ -20,8 +17,8 @@ import org.springframework.context.annotation.Configuration;
 public class TVShowConfiguration<T> {
 
     @Bean
-    public ITVShowService tvShowService(TVShowRepository tvShowRepository, CSVProcessor<T> csvProcessor) {
-        return new TVShowServiceImpl<>(tvShowRepository, csvProcessor);
+    public ITVShowService tvShowService(TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository, CSVProcessor<T> csvProcessor) {
+        return new TVShowServiceImpl<>(tvShowRepository, tvShowGenreRepository,csvProcessor);
     }
 
     @Bean

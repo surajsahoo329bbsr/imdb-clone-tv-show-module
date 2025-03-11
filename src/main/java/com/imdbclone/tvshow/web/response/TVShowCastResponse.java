@@ -1,6 +1,6 @@
 package com.imdbclone.tvshow.web.response;
 
-import com.imdbclone.tvshow.dto.TVShowCastPersonDto;
+import com.imdbclone.tvshow.dto.TVShowCastPersonDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +14,7 @@ public class TVShowCastResponse {
 
     private Long showId;
 
-    private TVShowCastPersonDto tvShowCastPersonDto;
+    private TVShowCastPersonDTO tvShowCastPersonDto;
 
     private String characterName;
 

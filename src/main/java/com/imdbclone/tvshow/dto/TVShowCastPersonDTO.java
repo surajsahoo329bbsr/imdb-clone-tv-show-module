@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Builder
 @Getter
 @Setter
-public class TVShowCastPersonDto {
+public class TVShowCastPersonDTO {
 
     private Long id;
 

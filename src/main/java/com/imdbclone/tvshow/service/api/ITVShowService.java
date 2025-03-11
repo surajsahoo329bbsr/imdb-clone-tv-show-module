@@ -1,5 +1,6 @@
 package com.imdbclone.tvshow.service.api;
 
+import com.imdbclone.tvshow.dto.TVShowWithGenreDTO;
 import com.imdbclone.tvshow.entity.TVShow;
 import com.imdbclone.tvshow.web.response.TVShowResponse;
 import com.imdbclone.tvshow.web.request.TVShowRequest;
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 public interface ITVShowService {
 
-    List<TVShowResponse> getAllTVShows(Integer pageNumber, Integer pageSize, boolean sortByLatestFirst);
+    List<TVShowWithGenreDTO> getAllTVShows(Integer pageNumber, Integer pageSize, boolean sortByLatestFirst);
 
     TVShowResponse getTVShowById(Long id);
 

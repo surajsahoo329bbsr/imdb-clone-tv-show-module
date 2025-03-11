@@ -1,6 +1,6 @@
 package com.imdbclone.tvshow.service.implementation;
 
-import com.imdbclone.tvshow.dto.TVShowCastPersonDto;
+import com.imdbclone.tvshow.dto.TVShowCastPersonDTO;
 import com.imdbclone.tvshow.entity.TVShowCast;
 import com.imdbclone.tvshow.repository.TVShowCastRepository;
 import com.imdbclone.tvshow.service.api.ITVShowCastService;
@@ -26,7 +26,7 @@ public class TVShowCastServiceImpl implements ITVShowCastService {
         List<TVShowCast> tvShowCasts = tvShowCastRepository.findTVShowCastByShowId(showId);
         //RestTemplate restTemplate = new RestTemplate();
         //TVShowCastPersonDto tvShowCastPersonDto = restTemplate.getForObject(null, TVShowCastPersonDto.class);
-        TVShowCastPersonDto tvShowCastPersonDummyDto = TVShowCastPersonDto
+        TVShowCastPersonDTO tvShowCastPersonDummyDto = TVShowCastPersonDTO
                 .builder()
                 .id(1L)
                 .name("Dummy Name")
@@ -63,7 +63,7 @@ public class TVShowCastServiceImpl implements ITVShowCastService {
 
     @Override
     public TVShowCastResponse updateTVShowCast(Long castId, TVShowCastRequest tvShowCastRequest) {
-        TVShowCastPersonDto tvShowCastPersonDummyDto = TVShowCastPersonDto
+        TVShowCastPersonDTO tvShowCastPersonDummyDto = TVShowCastPersonDTO
                 .builder()
                 .id(2L)
                 .name("Dummy Name")

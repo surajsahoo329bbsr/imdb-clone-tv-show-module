@@ -1,5 +1,6 @@
 package com.imdbclone.tvshow.web.controller;
 
+import com.imdbclone.tvshow.dto.TVShowWithGenreDTO;
 import com.imdbclone.tvshow.entity.TVShow;
 import com.imdbclone.tvshow.service.api.ITVShowService;
 import com.imdbclone.tvshow.web.request.TVShowRequest;
@@ -24,7 +25,7 @@ public class TVShowController {
 
     @GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllTVShows(@RequestParam(defaultValue = "1") @Positive Integer pageNumber, @RequestParam(defaultValue = "10") @Positive Integer pageSize, @RequestParam(defaultValue = "false") boolean sortByLatestFirst) {
-        List<TVShowResponse> tvShows = tvShowService.getAllTVShows(pageNumber, pageSize, sortByLatestFirst);
+        List<TVShowWithGenreDTO> tvShows = tvShowService.getAllTVShows(pageNumber, pageSize, sortByLatestFirst);
         return new ResponseEntity<>(tvShows, HttpStatus.OK);
     }
 
