@@ -2,6 +2,7 @@ package com.imdbclone.tvshow.service.implementation;
 
 import com.imdbclone.tvshow.dto.TVShowWithGenreDTO;
 import com.imdbclone.tvshow.entity.TVShow;
+import com.imdbclone.tvshow.exception.CustomException;
 import com.imdbclone.tvshow.processor.CSVProcessor;
 import com.imdbclone.tvshow.repository.TVShowGenreRepository;
 import com.imdbclone.tvshow.repository.TVShowRepository;
@@ -14,9 +15,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -63,8 +66,12 @@ public class TVShowServiceImpl<T> implements ITVShowService {
             Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
             Page<Object[]> page = tvShowRepository.findTVShowsWithGenreById(pageable);
 
-            /*List<Long> genreIds = page.stream()
-                    .map(tv -> (Long) tv[9])
+            /*List<String> genreIds = page.stream()
+                    .flatMap(tv -> Arrays.stream(((String) tv[2]).split(","))
+                            .map(Long::parseLong))
+                    .toList()
+                    .stream()
+                    .map(id -> genres.getOrDefault(id, "Unknown")) // Map genre ID to name
                     .toList();
 
             RestTemplate restTemplate = new RestTemplate();
@@ -81,14 +88,16 @@ public class TVShowServiceImpl<T> implements ITVShowService {
                             })
                     .getBody();*/
 
-            //List<TVShowWithGenreDTO> tvShowWithGenreDTOList = new ArrayList<>();
-
             return page.stream()
                     .map(tv -> new TVShowWithGenreDTO(
                             (Long) tv[0],
                             (String) tv[1],
-                            Collections.singletonList(genres.getOrDefault((Long) tv[2], "Unknown")),
-                            (LocalDateTime) tv[3],
+                            Arrays.stream(((String) tv[2]).split(",")) // Get genre IDs for this specific row
+                                    .map(Long::parseLong)
+                                    .map(id -> genres.getOrDefault(id, "Unknown")) // Map genre ID to name
+                                    .distinct() // Remove duplicates
+                                    .toList(),
+                            ((Timestamp) tv[3]).toLocalDateTime(),
                             (String) tv[4],
                             (Integer) tv[5],
                             (Float) tv[6],
@@ -101,20 +110,19 @@ public class TVShowServiceImpl<T> implements ITVShowService {
                     .toList();
 
         } catch (IllegalArgumentException e) {
-            //throw new CustomBadRequestException("Invalid pagination parameters: " + e.getMessage());
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage(), "Please check the arguments given");
         } catch (DataAccessException e) {
-            //throw new DatabaseException("Database error occurred while fetching TV shows.", e);
+            throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         } catch (NoSuchElementException e) {
-            //throw new ResourceNotFoundException("No TV Shows found.");
+            throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), "Please try to add some TV shows");
         }
-        return null;
     }
 
     @Override
     public TVShowResponse getTVShowById(Long id) {
 
         List<String> genreList = tvShowGenreRepository.findTVShowGenreByShowId(id).stream()
-                .map(t -> genres.getOrDefault(t.getShowId(), "Unknown"))
+                .map(t -> genres.getOrDefault(t.getGenreId(), "Unknown"))
                 .toList();
 
         return tvShowRepository.findById(id)

@@ -27,8 +27,8 @@ public class TVShowConfiguration<T> {
     }
 
     @Bean
-    public ITVShowSeasonService tvShowSeasonService(TVShowSeasonRepository tvShowSeasonRepository, TVShowRepository tvShowRepository) {
-        return new TVShowSeasonServiceImpl(tvShowSeasonRepository, tvShowRepository);
+    public ITVShowSeasonService tvShowSeasonService(TVShowSeasonRepository tvShowSeasonRepository, TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository) {
+        return new TVShowSeasonServiceImpl(tvShowSeasonRepository, tvShowRepository, tvShowGenreRepository);
     }
 
     @Bean

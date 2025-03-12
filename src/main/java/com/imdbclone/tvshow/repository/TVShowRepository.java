@@ -14,7 +14,7 @@ public interface TVShowRepository extends PagingAndSortingRepository<TVShow, Lon
     @Query(value = """
                  SELECT tv.id AS tvShowId,
                         tv.title AS title,
-                        tg.genre_id AS genreId,
+                        GROUP_CONCAT(tg.genre_id) AS genreIds,
                         tv.release_year AS releaseYear,
                         tv.language AS language,
                         tv.seasons_count AS seasonsCount,
@@ -22,10 +22,11 @@ public interface TVShowRepository extends PagingAndSortingRepository<TVShow, Lon
                         tv.poster_url AS posterUrl,
                         tv.description AS description,
                         tv.status AS status,
-                        tv.is_deleted AS isDeleted,
+                        tv.is_deleted AS isDeleted
                  FROM tv_show tv
                  JOIN tv_show_genre tg ON tv.id = tg.show_id
                  WHERE tv.is_deleted = false
+                 GROUP BY tv.id
             """, nativeQuery = true)
     Page<Object[]> findTVShowsWithGenreById(Pageable pageable);
 }

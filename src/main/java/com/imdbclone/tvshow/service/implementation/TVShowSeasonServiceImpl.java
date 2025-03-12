@@ -3,6 +3,7 @@ package com.imdbclone.tvshow.service.implementation;
 
 import com.imdbclone.tvshow.entity.TVShow;
 import com.imdbclone.tvshow.entity.TVShowSeason;
+import com.imdbclone.tvshow.repository.TVShowGenreRepository;
 import com.imdbclone.tvshow.repository.TVShowRepository;
 import com.imdbclone.tvshow.repository.TVShowSeasonRepository;
 import com.imdbclone.tvshow.service.api.ITVShowSeasonService;
@@ -15,15 +16,41 @@ import org.springframework.data.domain.Sort;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 public class TVShowSeasonServiceImpl implements ITVShowSeasonService {
 
     private final TVShowRepository tvShowRepository;
     private final TVShowSeasonRepository tvShowSeasonRepository;
+    private final TVShowGenreRepository tvShowGenreRepository;
 
-    public TVShowSeasonServiceImpl(TVShowSeasonRepository tvShowSeasonRepository, TVShowRepository tvShowRepository) {
+    private final Map<Long, String> genres = Map.ofEntries(
+            Map.entry(1L, "Action"),
+            Map.entry(2L, "Adventure"),
+            Map.entry(3L, "Animation"),
+            Map.entry(4L, "Comedy"),
+            Map.entry(5L, "Crime"),
+            Map.entry(6L, "Documentary"),
+            Map.entry(7L, "Drama"),
+            Map.entry(8L, "Fantasy"),
+            Map.entry(9L, "Historical"),
+            Map.entry(10L, "Horror"),
+            Map.entry(11L, "Mystery"),
+            Map.entry(12L, "Romance"),
+            Map.entry(13L, "Sci-Fi"),
+            Map.entry(14L, "Thriller"),
+            Map.entry(15L, "Supernatural"),
+            Map.entry(16L, "Western"),
+            Map.entry(17L, "Reality-TV"),
+            Map.entry(18L, "Musical"),
+            Map.entry(19L, "War"),
+            Map.entry(20L, "Sports")
+    );
+
+    public TVShowSeasonServiceImpl(TVShowSeasonRepository tvShowSeasonRepository, TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository) {
         this.tvShowSeasonRepository = tvShowSeasonRepository;
         this.tvShowRepository = tvShowRepository;
+        this.tvShowGenreRepository = tvShowGenreRepository;
     }
 
     @Override
@@ -50,6 +77,9 @@ public class TVShowSeasonServiceImpl implements ITVShowSeasonService {
                 Sort.by("id").ascending();
 
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+        List<String> genreList = tvShowGenreRepository.findTVShowGenreByShowId(showId).stream()
+                .map(t -> genres.getOrDefault(t.getGenreId(), "Unknown"))
+                .toList();
 
         List<TVShowSeasonResponse> tvShowSeasonResponsesList = tvShowSeasonRepository.findTVShowSeasonsByShowId(showId, pageable)
                 .stream()
@@ -69,6 +99,7 @@ public class TVShowSeasonServiceImpl implements ITVShowSeasonService {
                 .tvShowResponse(TVShowResponse.builder()
                         .id(tvShow.getId())
                         .title(tvShow.getTitle())
+                        .genres(genreList)
                         .releaseYear(tvShow.getReleaseYear())
                         .language(tvShow.getLanguage())
                         .seasonsCount(tvShow.getSeasonsCount())
