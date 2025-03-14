@@ -4,6 +4,7 @@ import com.imdbclone.tvshow.dto.TVShowCastPersonDTO;
 import com.imdbclone.tvshow.entity.TVShowCast;
 import com.imdbclone.tvshow.repository.TVShowCastRepository;
 import com.imdbclone.tvshow.service.api.ITVShowCastService;
+import com.imdbclone.tvshow.service.client.UserServiceClient;
 import com.imdbclone.tvshow.web.request.TVShowCastRequest;
 import com.imdbclone.tvshow.web.response.TVShowCastResponse;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,36 +12,34 @@ import jakarta.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TVShowCastServiceImpl implements ITVShowCastService {
 
     private final TVShowCastRepository tvShowCastRepository;
+    private final UserServiceClient userServiceClient;
 
-    public TVShowCastServiceImpl(TVShowCastRepository tvShowCastRepository) {
+    public TVShowCastServiceImpl(TVShowCastRepository tvShowCastRepository, UserServiceClient userServiceClient) {
         this.tvShowCastRepository = tvShowCastRepository;
+        this.userServiceClient = userServiceClient;
     }
 
     @Override
-    public List<TVShowCastResponse> getCastByShowId(Long showId) {
+    public List<TVShowCastResponse> getCastsByShowId(Long showId) {
         List<TVShowCast> tvShowCasts = tvShowCastRepository.findTVShowCastByShowId(showId);
-        //RestTemplate restTemplate = new RestTemplate();
-        //TVShowCastPersonDto tvShowCastPersonDto = restTemplate.getForObject(null, TVShowCastPersonDto.class);
-        TVShowCastPersonDTO tvShowCastPersonDummyDto = TVShowCastPersonDTO
-                .builder()
-                .id(1L)
-                .name("Dummy Name")
-                .dateOfBirth(LocalDate.MAX)
-                .role("Dummy Role")
-                .photoUrl("https://dummyurl.com")
-                .biographyDescription("Dummy Biography")
-                .build();
+        List<Long> personIds = tvShowCasts.stream()
+                .map(TVShowCast::getPersonId)
+                .distinct()
+                .toList();
+
+        Map<Long, TVShowCastPersonDTO> tvShowCastMap = userServiceClient.getTVShowCastsByPersonIds(personIds);
 
         return tvShowCasts.stream()
                 .map(tvShowCast -> new TVShowCastResponse(
                         tvShowCast.getId(),
                         tvShowCast.getShowId(),
-                        tvShowCastPersonDummyDto,
+                        tvShowCastMap.getOrDefault(tvShowCast.getPersonId(), null),
                         tvShowCast.getCharacterName(),
                         tvShowCast.getSeasonNumber(),
                         tvShowCast.getRoleType()

@@ -2,11 +2,13 @@ package com.imdbclone.tvshow.service.implementation;
 
 
 import com.imdbclone.tvshow.entity.TVShow;
+import com.imdbclone.tvshow.entity.TVShowGenre;
 import com.imdbclone.tvshow.entity.TVShowSeason;
 import com.imdbclone.tvshow.repository.TVShowGenreRepository;
 import com.imdbclone.tvshow.repository.TVShowRepository;
 import com.imdbclone.tvshow.repository.TVShowSeasonRepository;
 import com.imdbclone.tvshow.service.api.ITVShowSeasonService;
+import com.imdbclone.tvshow.service.client.AdminServiceClient;
 import com.imdbclone.tvshow.web.request.TVShowSeasonRequest;
 import com.imdbclone.tvshow.web.response.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,8 +25,9 @@ public class TVShowSeasonServiceImpl implements ITVShowSeasonService {
     private final TVShowRepository tvShowRepository;
     private final TVShowSeasonRepository tvShowSeasonRepository;
     private final TVShowGenreRepository tvShowGenreRepository;
+    private final AdminServiceClient adminServiceClient;
 
-    private final Map<Long, String> genres = Map.ofEntries(
+    /*private final Map<Long, String> genres = Map.ofEntries(
             Map.entry(1L, "Action"),
             Map.entry(2L, "Adventure"),
             Map.entry(3L, "Animation"),
@@ -45,12 +48,13 @@ public class TVShowSeasonServiceImpl implements ITVShowSeasonService {
             Map.entry(18L, "Musical"),
             Map.entry(19L, "War"),
             Map.entry(20L, "Sports")
-    );
+    );*/
 
-    public TVShowSeasonServiceImpl(TVShowSeasonRepository tvShowSeasonRepository, TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository) {
+    public TVShowSeasonServiceImpl(TVShowSeasonRepository tvShowSeasonRepository, TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository, AdminServiceClient adminServiceClient) {
         this.tvShowSeasonRepository = tvShowSeasonRepository;
         this.tvShowRepository = tvShowRepository;
         this.tvShowGenreRepository = tvShowGenreRepository;
+        this.adminServiceClient = adminServiceClient;
     }
 
     @Override
@@ -75,8 +79,12 @@ public class TVShowSeasonServiceImpl implements ITVShowSeasonService {
 
         Sort sort = sortByLatestFirst ? Sort.by("id").descending() :
                 Sort.by("id").ascending();
-
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+
+        List<TVShowGenre> tvShowGenres = tvShowGenreRepository.findTVShowGenreByShowId(showId);
+        List<Long> genreIds = tvShowGenres.stream().map(TVShowGenre::getGenreId).toList();
+        Map<Long, String> genres = adminServiceClient.getGenreNamesById(genreIds);
+
         List<String> genreList = tvShowGenreRepository.findTVShowGenreByShowId(showId).stream()
                 .map(t -> genres.getOrDefault(t.getGenreId(), "Unknown"))
                 .toList();

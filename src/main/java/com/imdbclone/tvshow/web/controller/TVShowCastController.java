@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,23 +21,26 @@ public class TVShowCastController {
 
     @GetMapping(path = "/{id}/cast", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTVShowCastsByShowId(@PathVariable(name = "id") Long showId) {
-        List<TVShowCastResponse> tvShowCastResponses = tvShowCastService.getCastByShowId(showId);
+        List<TVShowCastResponse> tvShowCastResponses = tvShowCastService.getCastsByShowId(showId);
         return new ResponseEntity<>(tvShowCastResponses, HttpStatus.OK);
     }
 
     @PostMapping(path = "/cast", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addTVShowCast(@RequestBody TVShowCastRequest tvShowCastRequest) {
         tvShowCastService.addTVShowCast(tvShowCastRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping(path = "/cast/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateTVShowCastById(@PathVariable(name = "id") Long castId, @RequestBody TVShowCastRequest tvShowCastRequest) {
         TVShowCastResponse tvShowCastResponse = tvShowCastService.updateTVShowCast(castId, tvShowCastRequest);
         return new ResponseEntity<>(tvShowCastResponse, HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping(path = "/cast/{id}/delete")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteTVShowCastById(@PathVariable(name = "id") Long castId) {
         tvShowCastService.deleteTVShowCastById(castId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

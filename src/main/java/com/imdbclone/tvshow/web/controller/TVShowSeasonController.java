@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,18 +32,21 @@ public class TVShowSeasonController {
     }
 
     @PostMapping(path = "/seasons", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addTVShowSeason(@RequestBody TVShowSeasonRequest tvShowSeasonRequest) {
         tvShowSeasonService.addTVShowSeason(tvShowSeasonRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping(path = "/seasons/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateTVShowSeasonById(@PathVariable(name = "id") Long seasonId, @RequestBody TVShowSeasonRequest tvShowSeasonRequest) {
         TVShowSeasonResponse tvShowSeasonResponse = tvShowSeasonService.updateTVShowSeasonById(seasonId, tvShowSeasonRequest);
         return new ResponseEntity<>(tvShowSeasonResponse, HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping(path = "/seasons/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteTVShowSeasonById(@PathVariable(name = "id") Long seasonId) {
         tvShowSeasonService.deleteTVShowSeasonById(seasonId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

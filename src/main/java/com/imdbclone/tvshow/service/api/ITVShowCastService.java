@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ITVShowCastService {
 
-    List<TVShowCastResponse> getCastByShowId(Long showId);
+    List<TVShowCastResponse> getCastsByShowId(Long showId);
 
     void addTVShowCast(TVShowCastRequest tvShowCastRequest);
 

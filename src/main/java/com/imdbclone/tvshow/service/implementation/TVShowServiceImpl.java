@@ -2,11 +2,13 @@ package com.imdbclone.tvshow.service.implementation;
 
 import com.imdbclone.tvshow.dto.TVShowWithGenreDTO;
 import com.imdbclone.tvshow.entity.TVShow;
+import com.imdbclone.tvshow.entity.TVShowGenre;
 import com.imdbclone.tvshow.exception.CustomException;
 import com.imdbclone.tvshow.processor.CSVProcessor;
 import com.imdbclone.tvshow.repository.TVShowGenreRepository;
 import com.imdbclone.tvshow.repository.TVShowRepository;
 import com.imdbclone.tvshow.service.api.ITVShowService;
+import com.imdbclone.tvshow.service.client.AdminServiceClient;
 import com.imdbclone.tvshow.web.response.TVShowResponse;
 import com.imdbclone.tvshow.web.request.TVShowRequest;
 import jakarta.persistence.EntityNotFoundException;
@@ -29,7 +31,8 @@ public class TVShowServiceImpl<T> implements ITVShowService {
     private final TVShowRepository tvShowRepository;
     private final TVShowGenreRepository tvShowGenreRepository;
     private final CSVProcessor<T> csvProcessor;
-    private final Map<Long, String> genres = Map.ofEntries(
+    private final AdminServiceClient adminServiceClient;
+    /*private final Map<Long, String> genres = Map.ofEntries(
             Map.entry(1L, "Action"),
             Map.entry(2L, "Adventure"),
             Map.entry(3L, "Animation"),
@@ -50,12 +53,13 @@ public class TVShowServiceImpl<T> implements ITVShowService {
             Map.entry(18L, "Musical"),
             Map.entry(19L, "War"),
             Map.entry(20L, "Sports")
-    );
+    );*/
 
-    public TVShowServiceImpl(TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository, CSVProcessor<T> csvProcessor) {
+    public TVShowServiceImpl(TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository, CSVProcessor<T> csvProcessor, AdminServiceClient adminServiceClient) {
         this.tvShowRepository = tvShowRepository;
         this.tvShowGenreRepository = tvShowGenreRepository;
         this.csvProcessor = csvProcessor;
+        this.adminServiceClient = adminServiceClient;
     }
 
     @Override
@@ -66,27 +70,12 @@ public class TVShowServiceImpl<T> implements ITVShowService {
             Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
             Page<Object[]> page = tvShowRepository.findTVShowsWithGenreById(pageable);
 
-            /*List<String> genreIds = page.stream()
+            List<Long> genreIds = page.stream()
                     .flatMap(tv -> Arrays.stream(((String) tv[2]).split(","))
                             .map(Long::parseLong))
-                    .toList()
-                    .stream()
-                    .map(id -> genres.getOrDefault(id, "Unknown")) // Map genre ID to name
                     .toList();
 
-            RestTemplate restTemplate = new RestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Content-Type", "application/json");
-
-            // Create request entity
-            HttpEntity<List<Long>> requestEntity = new HttpEntity<>(genreIds, headers);
-            Map<Long, String> genres = restTemplate.exchange(
-                            "https://dummyurl.com",
-                            HttpMethod.POST,
-                            requestEntity,
-                            new ParameterizedTypeReference<HashMap<Long, List<String>>>() {
-                            })
-                    .getBody();*/
+            Map<Long, String> genres = adminServiceClient.getGenreNamesById(genreIds);
 
             return page.stream()
                     .map(tv -> new TVShowWithGenreDTO(
@@ -121,24 +110,32 @@ public class TVShowServiceImpl<T> implements ITVShowService {
     @Override
     public TVShowResponse getTVShowById(Long id) {
 
-        List<String> genreList = tvShowGenreRepository.findTVShowGenreByShowId(id).stream()
-                .map(t -> genres.getOrDefault(t.getGenreId(), "Unknown"))
+        TVShow tvShow = tvShowRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("TV Show not found with id: " + id));
+
+        List<TVShowGenre> tvShowGenres = tvShowGenreRepository.findTVShowGenreByShowId(id);
+        if (tvShowGenres.isEmpty()) {
+            return new TVShowResponse(
+                    tvShow.getId(), tvShow.getTitle(), Collections.emptyList(),
+                    tvShow.getReleaseYear(), tvShow.getLanguage(), tvShow.getSeasonsCount(),
+                    tvShow.getScore(), tvShow.getPosterUrl(), tvShow.getDescription(),
+                    tvShow.isStatus()
+            );
+        }
+
+        List<Long> genreIds = tvShowGenres.stream().map(TVShowGenre::getGenreId).toList();
+        Map<Long, String> genres = adminServiceClient.getGenreNamesById(genreIds);
+
+        List<String> genreList = tvShowGenres.stream()
+                .map(tvShowGenre -> genres.getOrDefault(tvShowGenre.getGenreId(), "Unknown"))
                 .toList();
 
-        return tvShowRepository.findById(id)
-                .map(tvShow -> new TVShowResponse(
-                        tvShow.getId(),
-                        tvShow.getTitle(),
-                        genreList,
-                        tvShow.getReleaseYear(),
-                        tvShow.getLanguage(),
-                        tvShow.getSeasonsCount(),
-                        tvShow.getScore(),
-                        tvShow.getPosterUrl(),
-                        tvShow.getDescription(),
-                        tvShow.isStatus()))
-                .orElse(null);
-
+        return new TVShowResponse(
+                tvShow.getId(), tvShow.getTitle(), genreList,
+                tvShow.getReleaseYear(), tvShow.getLanguage(), tvShow.getSeasonsCount(),
+                tvShow.getScore(), tvShow.getPosterUrl(), tvShow.getDescription(),
+                tvShow.isStatus()
+        );
     }
 
     @Override
