@@ -16,20 +16,20 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private static final String SECRET_KEY = "gUOlN5SLIsdjotwDnW4+lrQvtjVFz349/PGMhTlYcYY=";
-    private final SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+    private final String jwtSecretKey;
     private final AdminServiceClient adminServiceClient;
 
-    public JwtAuthFilter(AdminServiceClient adminServiceClient) {
+    public JwtAuthFilter(String jwtSecretKey, AdminServiceClient adminServiceClient) {
+        this.jwtSecretKey = jwtSecretKey;
         this.adminServiceClient = adminServiceClient;
     }
 
     private Claims extractClaims(String token) {
+        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecretKey));
         return Jwts.parser()
                 .verifyWith(key)
                 .build()

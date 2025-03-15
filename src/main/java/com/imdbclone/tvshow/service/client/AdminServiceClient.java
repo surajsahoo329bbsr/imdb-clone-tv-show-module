@@ -11,10 +11,14 @@ import java.util.Map;
 @FeignClient(name = "ADMIN-SERVICE")
 public interface AdminServiceClient {
 
-    @GetMapping(path = "/admins/{id}")//TODO path
+    @GetMapping(path = "/admin/{id}")
+//TODO path
     Boolean isAdminValid(@PathVariable("id") Long adminId);
 
     @GetMapping(path = "/genres")
     Map<Long, String> getGenreNamesById(@RequestParam List<Long> genreIds);
+
+    @GetMapping(path = "/admin/verify")
+    Long authenticateAdminAndFetchId(@RequestParam String username, @RequestParam String email, @RequestParam String password);
 
 }

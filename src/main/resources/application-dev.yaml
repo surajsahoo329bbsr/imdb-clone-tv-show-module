@@ -24,7 +24,11 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
-
+  jwt:
+    secret: "${DEV_JWT_SECRET}"
+    username: ${DEV_DUMMY_ADMIN_USERNAME}
+    email: "${DEV_DUMMY_ADMIN_EMAIL}"
+    hash-password: "${DEV_DUMMY_ADMIN_HASH_PWD}"
 hibernate:
   validator:
     fail-fast: false
