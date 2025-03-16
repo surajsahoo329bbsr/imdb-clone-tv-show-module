@@ -12,7 +12,7 @@ import java.util.Map;
 public interface AdminServiceClient {
 
     @GetMapping(path = "/admin/{id}")
-//TODO path
+        //TODO path
     Boolean isAdminValid(@PathVariable("id") Long adminId);
 
     @GetMapping(path = "/genres")

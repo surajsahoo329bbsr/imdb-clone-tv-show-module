@@ -1,6 +1,6 @@
 package com.imdbclone.tvshow.web.controller;
 
-import com.imdbclone.tvshow.service.api.IJwtService;
+import com.imdbclone.tvshow.service.api.IJWTService;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class JwtController {
 
     @Autowired
-    private IJwtService jwtService;
+    private IJWTService jwtService;
 
     @GetMapping(value = "/dummy/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> verifyDummyAdminCredentialsToGenerateToken(@RequestParam String username, @RequestParam String email, @RequestParam @NotBlank String password) {

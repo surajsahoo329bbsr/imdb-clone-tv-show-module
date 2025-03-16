@@ -18,12 +18,12 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.util.*;
 
-public class JwtAuthFilter extends OncePerRequestFilter {
+public class JWTAuthFilter extends OncePerRequestFilter {
 
     private final String jwtSecretKey;
     private final AdminServiceClient adminServiceClient;
 
-    public JwtAuthFilter(String jwtSecretKey, AdminServiceClient adminServiceClient) {
+    public JWTAuthFilter(String jwtSecretKey, AdminServiceClient adminServiceClient) {
         this.jwtSecretKey = jwtSecretKey;
         this.adminServiceClient = adminServiceClient;
     }

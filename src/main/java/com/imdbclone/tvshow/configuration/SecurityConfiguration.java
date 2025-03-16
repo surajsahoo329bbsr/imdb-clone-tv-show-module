@@ -1,6 +1,6 @@
 package com.imdbclone.tvshow.configuration;
 
-import com.imdbclone.tvshow.filter.JwtAuthFilter;
+import com.imdbclone.tvshow.filter.JWTAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,9 +13,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfiguration {
 
-    private final JwtAuthFilter jwtAuthFilter;
+    private final JWTAuthFilter jwtAuthFilter;
 
-    public SecurityConfiguration(JwtAuthFilter jwtAuthFilter) {
+    public SecurityConfiguration(JWTAuthFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
 

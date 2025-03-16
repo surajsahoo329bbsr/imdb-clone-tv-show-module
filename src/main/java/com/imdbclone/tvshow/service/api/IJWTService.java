@@ -1,6 +1,6 @@
 package com.imdbclone.tvshow.service.api;
 
-public interface IJwtService {
+public interface IJWTService {
 
     String generateToken(Long adminId, String username, String role);
 

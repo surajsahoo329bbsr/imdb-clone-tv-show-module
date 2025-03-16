@@ -1,6 +1,6 @@
 package com.imdbclone.tvshow.service.implementation;
 
-import com.imdbclone.tvshow.service.api.IJwtService;
+import com.imdbclone.tvshow.service.api.IJWTService;
 import com.imdbclone.tvshow.service.client.AdminServiceClient;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -11,7 +11,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.Map;
 
-public class JwtServiceImpl implements IJwtService {
+public class JWTServiceImpl implements IJWTService {
 
     private final AdminServiceClient adminServiceClient;
     private final PasswordEncoder passwordEncoder;
@@ -21,7 +21,7 @@ public class JwtServiceImpl implements IJwtService {
     private final String hashedPassword;
 
 
-    public JwtServiceImpl(AdminServiceClient adminServiceClient, PasswordEncoder passwordEncoder, String jwtSecretKey, String username, String email, String hashedPassword) {
+    public JWTServiceImpl(AdminServiceClient adminServiceClient, PasswordEncoder passwordEncoder, String jwtSecretKey, String username, String email, String hashedPassword) {
         this.adminServiceClient = adminServiceClient;
         this.passwordEncoder = passwordEncoder;
         this.jwtSecretKey = jwtSecretKey;
@@ -50,10 +50,11 @@ public class JwtServiceImpl implements IJwtService {
         boolean isUsernameValid = this.username.equals(username);
         boolean isEmailValid = this.email.equals(email);
         boolean isPasswordValid = passwordEncoder.matches(password, hashedPassword);
+        Long adminId = adminServiceClient.authenticateAdminAndFetchId(username, email, password);
 
         if ((isUsernameValid || isEmailValid) && isPasswordValid) {
             String subject = isUsernameValid ? username : email; // Use the valid identifier
-            return generateToken(1L, subject, "ADMIN");
+            return generateToken(adminId, subject, "ADMIN");
         }
 
         return "Invalid Dummy Admin Credentials";
@@ -62,9 +63,6 @@ public class JwtServiceImpl implements IJwtService {
     @Override
     public String verifyAdminCredentialsToGenerateToken(String username, String email, String password) {
         Long adminId = adminServiceClient.authenticateAdminAndFetchId(username, email, password);
-        if (adminId != null) {
-            return generateToken(adminId, username, "ADMIN");
-        }
-        return "Invalid Admin Credentials";
+        return adminId != null ? generateToken(adminId, username, "ADMIN") : "Invalid Admin Credentials";
     }
 }
