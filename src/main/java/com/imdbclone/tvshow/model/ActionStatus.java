@@ -1,7 +1,7 @@
 package com.imdbclone.tvshow.model;
 
 public enum ActionStatus {
-    SUCCESSFUL,
+    SUCCESS,
     FAILURE,
     UNKNOWN
 }

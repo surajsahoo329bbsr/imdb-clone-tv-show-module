@@ -1,5 +1,6 @@
 package com.imdbclone.tvshow.web.controller;
 
+import com.imdbclone.tvshow.annotation.SetRequestAttributes;
 import com.imdbclone.tvshow.dto.TVShowWithGenreDTO;
 import com.imdbclone.tvshow.entity.TVShow;
 import com.imdbclone.tvshow.service.api.ITVShowService;
@@ -31,7 +32,9 @@ public class TVShowController {
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @SetRequestAttributes
     public ResponseEntity<?> getTVShowById(@PathVariable(name = "id") Long showId) {
+        System.out.println("Suraj: Inside Controller Method");
         TVShowResponse tvShowResponse = tvShowService.getTVShowById(showId);
         return new ResponseEntity<>(tvShowResponse, HttpStatus.OK);
     }

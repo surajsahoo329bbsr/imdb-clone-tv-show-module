@@ -1,7 +1,6 @@
 package com.imdbclone.tvshow.configuration;
 
 import com.imdbclone.tvshow.filter.JWTAuthFilter;
-import com.imdbclone.tvshow.interceptor.LoggingInterceptor;
 import com.imdbclone.tvshow.processor.CSVProcessor;
 import com.imdbclone.tvshow.repository.*;
 import com.imdbclone.tvshow.service.api.*;
@@ -48,10 +47,15 @@ public class TVShowConfiguration<T> {
         return new JWTServiceImpl(adminServiceClient, passwordEncoder(), jwtSecretKey, username, email, hashedPassword);
     }
 
-    @Bean
-    public LoggingInterceptor loggingInterceptor(IAppLogService appLogService, JWTUtils jwtUtils) {
-        return new LoggingInterceptor(appLogService, jwtUtils);
+    /*@Bean
+    public GlobalExceptionHandler globalExceptionHandler(IAppLogService appLogService, JWTUtils jwtUtils, HttpServletRequest httpServletRequest) {
+        return new GlobalExceptionHandler(appLogService, jwtUtils, httpServletRequest);
     }
+
+    @Bean
+    public RequestAttributeAspect requestAttributeAspect(HttpServletRequest httpServletRequest) {
+        return new RequestAttributeAspect(httpServletRequest);
+    }*/
 
     @Bean
     public IAppLogService appLogService(AppLogRepository appLogRepository) {

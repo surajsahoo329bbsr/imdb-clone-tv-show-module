@@ -1,7 +1,6 @@
 package com.imdbclone.tvshow.entity;
 
 import com.imdbclone.tvshow.model.ActionStatus;
-import com.imdbclone.tvshow.model.ActionType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,22 +19,20 @@ public class AppLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String entityType;
+    //@Column(nullable = false)
+    private String serviceName;
 
-    @Column(nullable = false)
     private Long entityId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ActionType actionType;
+    //@Column(nullable = false)
+    private String serviceMethod;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ActionStatus actionStatus;
 
     @Column(nullable = false)
-    private Integer HttpStatusCode;
+    private Integer httpStatusCode;
 
     @Column(columnDefinition = "TEXT")
     private String exceptionMessage;
