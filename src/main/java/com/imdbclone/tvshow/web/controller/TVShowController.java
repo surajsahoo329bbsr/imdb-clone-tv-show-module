@@ -25,43 +25,47 @@ public class TVShowController {
     @Autowired
     private ITVShowService tvShowService;
 
+    @SetRequestAttributes
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllTVShows(@RequestParam(defaultValue = "1") @Positive Integer pageNumber, @RequestParam(defaultValue = "10") @Positive Integer pageSize, @RequestParam(defaultValue = "false") boolean sortByLatestFirst) {
         List<TVShowWithGenreDTO> tvShows = tvShowService.getAllTVShows(pageNumber, pageSize, sortByLatestFirst);
         return new ResponseEntity<>(tvShows, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @SetRequestAttributes
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTVShowById(@PathVariable(name = "id") Long showId) {
-        System.out.println("Suraj: Inside Controller Method");
         TVShowResponse tvShowResponse = tvShowService.getTVShowById(showId);
         return new ResponseEntity<>(tvShowResponse, HttpStatus.OK);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @SetRequestAttributes
     @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addTVShow(@RequestBody TVShowRequest tvShowRequest) {
         tvShowService.addTVShow(tvShowRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping(path = "/upload/{adminId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @SetRequestAttributes
     @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(path = "/upload/{adminId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uploadTVShows(@PathVariable(name = "adminId") Long adminId, @RequestParam("file") MultipartFile tvShowsCsvFile) {
         UUID uploadId = tvShowService.uploadTVShows(adminId, tvShowsCsvFile);
         return new ResponseEntity<>(uploadId, HttpStatus.ACCEPTED);
     }
 
-    @PatchMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @SetRequestAttributes
     @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateTVShowById(@PathVariable(name = "id") Long id, @RequestBody TVShowRequest tvShowRequest) {
         TVShow tvShow = tvShowService.updateTVShowById(id, tvShowRequest);
         return new ResponseEntity<>(tvShow, HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping(path = "/{id}")
+    @SetRequestAttributes
     @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteTVShowById(@PathVariable(name = "id") Long showId) {
         tvShowService.deleteTVShowById(showId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

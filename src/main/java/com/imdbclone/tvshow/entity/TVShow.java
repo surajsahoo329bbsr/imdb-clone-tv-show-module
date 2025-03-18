@@ -5,7 +5,6 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TVShow {
+public class TVShow extends Milestone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,8 +45,8 @@ public class TVShow {
 
     private boolean status = false;
 
-    @Min(value=1, message = "TV Show's minimum score cannot be less than 1.0")
-    @Max(value=10, message = "TV Show's minimum score cannot be more than 10.0")
+    @Min(value = 1, message = "TV Show's minimum score cannot be less than 1.0")
+    @Max(value = 10, message = "TV Show's minimum score cannot be more than 10.0")
     private Float score;
 
     @Column(nullable = false)
@@ -55,7 +54,4 @@ public class TVShow {
     private Long adminId;
 
     private boolean isDeleted = false;
-
-    @Column(columnDefinition = "TIMESTAMP")
-    private Instant deletedAt;
 }

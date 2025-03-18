@@ -19,7 +19,6 @@ public class RequestAttributeAspect {
 
     public RequestAttributeAspect(HttpServletRequest httpServletRequest) {
         this.httpServletRequest = httpServletRequest;
-        System.out.println("Suraj inside RequestAttributeAspect");
     }
 
     @Around("@annotation(com.imdbclone.tvshow.annotation.SetRequestAttributes)")
@@ -38,7 +37,6 @@ public class RequestAttributeAspect {
 
                 if (parameter.isAnnotationPresent(PathVariable.class)) {
                     httpServletRequest.setAttribute("entityId", args[i]);
-                    System.out.println("Suraj pathVariable entityId" + args[i]);
                     break;
                 } else if (parameter.isAnnotationPresent(RequestBody.class)) {
 
@@ -49,14 +47,13 @@ public class RequestAttributeAspect {
                             fields[0].setAccessible(true);
                             Object entityIdValue = fields[0].get(requestBody);
                             httpServletRequest.setAttribute("entityId", entityIdValue);
-                            System.out.println("Suraj: Captured RequestBody entityId = " + entityIdValue);
                         }
                     }
                     break;
                 }
             }
         } catch (Exception e) {
-            throw e;
+            e.getStackTrace();
         }
 
         return joinPoint.proceed();

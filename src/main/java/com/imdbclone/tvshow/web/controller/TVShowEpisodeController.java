@@ -1,5 +1,6 @@
 package com.imdbclone.tvshow.web.controller;
 
+import com.imdbclone.tvshow.annotation.SetRequestAttributes;
 import com.imdbclone.tvshow.service.api.ITVShowEpisodeService;
 import com.imdbclone.tvshow.web.request.TVShowEpisodeRequest;
 import com.imdbclone.tvshow.web.response.TVShowEpisodeResponse;
@@ -19,34 +20,39 @@ public class TVShowEpisodeController {
     @Autowired
     private ITVShowEpisodeService tvShowEpisodeService;
 
+    @SetRequestAttributes
     @GetMapping(path = "/seasons/episodes/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTVShowEpisodeById(@PathVariable(name = "id") Long episodeId) {
         TVShowEpisodeResponse tvShowEpisodeResponse = tvShowEpisodeService.getTVShowEpisodeById(episodeId);
         return new ResponseEntity<>(tvShowEpisodeResponse, HttpStatus.OK);
     }
 
+    @SetRequestAttributes
     @GetMapping(path = "/seasons/{id}/episodes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTVShowEpisodesBySeasonId(@PathVariable(name = "id") Long seasonId, @RequestParam(defaultValue = "1") @Positive Integer pageNumber, @RequestParam(defaultValue = "10") @Positive Integer pageSize, @RequestParam(defaultValue = "false") boolean sortByLatestFirst) {
         TVShowSeasonWithEpisodesResponse tvShowSeasonWithEpisodesResponse = tvShowEpisodeService.getTVShowEpisodesBySeasonId(seasonId, pageNumber, pageSize, sortByLatestFirst);
         return new ResponseEntity<>(tvShowSeasonWithEpisodesResponse, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/seasons/episodes", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @SetRequestAttributes
     @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(path = "/seasons/episodes", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addTVShowEpisode(@RequestBody TVShowEpisodeRequest tvShowEpisodeRequest) {
         tvShowEpisodeService.addTVShowEpisode(tvShowEpisodeRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PatchMapping(path = "/seasons/episodes/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @SetRequestAttributes
     @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping(path = "/seasons/episodes/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateTVShowEpisodeById(@PathVariable(name = "id") Long episodeId, @RequestBody TVShowEpisodeRequest tvShowEpisodeRequest) {
         TVShowEpisodeResponse tvShowEpisodeResponse = tvShowEpisodeService.updateTVShowEpisodeById(episodeId, tvShowEpisodeRequest);
         return new ResponseEntity<>(tvShowEpisodeResponse, HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping(path = "/seasons/episodes/{id}")
+    @SetRequestAttributes
     @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping(path = "/seasons/episodes/{id}")
     public ResponseEntity<?> deleteTVShowEpisodeById(@PathVariable(name = "id") Long episodeId) {
         tvShowEpisodeService.deleteTVShowEpisodeById(episodeId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -52,11 +52,6 @@ public class GlobalExceptionHandler {
         Long entityId = (Long) httpServletRequest.getAttribute("entityId");
         String serviceMethod = (String) httpServletRequest.getAttribute("serviceMethod");
 
-        System.out.println("Suraj: Inside GlobalExceptionHandler");
-        System.out.println("Suraj: serviceName = " + serviceName);
-        System.out.println("Suraj: entityId = " + entityId);
-        System.out.println("Suraj: serviceMethod = " + serviceMethod);
-
         AppLog appLog = AppLog.builder()
                 .entityId(entityId) // Set properly if possible
                 .serviceName(serviceName)

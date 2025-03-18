@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
-import java.time.Instant;
-
 @Entity
 @Table(name = "tv_show_cast")
 @Getter
@@ -15,7 +13,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TVShowCast {
+public class TVShowCast extends Milestone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +38,4 @@ public class TVShowCast {
     private String roleType;
 
     private boolean isDeleted = false;
-
-    @Column(columnDefinition = "TIMESTAMP")
-    private Instant deletedAt;
 }

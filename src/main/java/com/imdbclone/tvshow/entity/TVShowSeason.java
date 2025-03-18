@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TVShowSeason {
+public class TVShowSeason extends Milestone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,7 +40,4 @@ public class TVShowSeason {
     private LocalDateTime releaseYear;
 
     private boolean isDeleted = false;
-
-    @Column(columnDefinition = "TIMESTAMP")
-    private Instant deletedAt;
 }

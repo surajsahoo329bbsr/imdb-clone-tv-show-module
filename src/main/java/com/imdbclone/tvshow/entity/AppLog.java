@@ -19,12 +19,10 @@ public class AppLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@Column(nullable = false)
     private String serviceName;
 
     private Long entityId;
 
-    //@Column(nullable = false)
     private String serviceMethod;
 
     @Enumerated(EnumType.STRING)

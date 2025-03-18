@@ -16,7 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -140,7 +140,7 @@ public class TVShowSeasonServiceImpl implements ITVShowSeasonService {
                 .orElseThrow(() -> new EntityNotFoundException("TV Show Season ID " + seasonId + " is unavailable"));
 
         tvShowSeason.setDeleted(true);
-        tvShowSeason.setDeletedAt(Instant.now());
+        tvShowSeason.setDeletedAt(LocalDateTime.now());
 
         tvShowSeasonRepository.save(tvShowSeason);
     }

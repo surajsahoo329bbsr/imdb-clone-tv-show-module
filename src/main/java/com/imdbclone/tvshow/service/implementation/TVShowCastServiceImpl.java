@@ -9,8 +9,8 @@ import com.imdbclone.tvshow.web.request.TVShowCastRequest;
 import com.imdbclone.tvshow.web.response.TVShowCastResponse;
 import jakarta.persistence.EntityNotFoundException;
 
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -101,7 +101,7 @@ public class TVShowCastServiceImpl implements ITVShowCastService {
                 .orElseThrow(() -> new EntityNotFoundException("TV Show Cast ID " + castId + " is unavailable"));
 
         tvShowCast.setDeleted(true);
-        tvShowCast.setDeletedAt(Instant.now());
+        tvShowCast.setDeletedAt(LocalDateTime.now());
 
         tvShowCastRepository.save(tvShowCast);
     }

@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -190,7 +189,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
                 .orElseThrow(() -> new EntityNotFoundException("TV Show ID " + id + " is unavailable"));
 
         tvShow.setDeleted(true);
-        tvShow.setDeletedAt(Instant.now());
+        tvShow.setDeletedAt(LocalDateTime.now());
 
         tvShowRepository.save(tvShow);
     }

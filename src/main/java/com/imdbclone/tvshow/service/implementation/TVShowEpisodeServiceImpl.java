@@ -14,7 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class TVShowEpisodeServiceImpl implements ITVShowEpisodeService {
@@ -135,7 +135,7 @@ public class TVShowEpisodeServiceImpl implements ITVShowEpisodeService {
                 .orElseThrow(() -> new EntityNotFoundException("TV Show Episode entry not found"));
 
         tvShowEpisode.setDeleted(true);
-        tvShowEpisode.setDeletedAt(Instant.now());
+        tvShowEpisode.setDeletedAt(LocalDateTime.now());
 
         tvShowEpisodeRepository.save(tvShowEpisode);
 

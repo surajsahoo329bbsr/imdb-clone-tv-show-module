@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TVShowEpisode {
+public class TVShowEpisode extends Milestone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +45,4 @@ public class TVShowEpisode {
     private Float score;
 
     private boolean isDeleted = false;
-
-    @Column(columnDefinition = "TIMESTAMP")
-    private Instant deletedAt;
 }
