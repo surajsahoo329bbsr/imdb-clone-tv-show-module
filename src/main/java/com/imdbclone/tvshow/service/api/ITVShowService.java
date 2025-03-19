@@ -1,7 +1,6 @@
 package com.imdbclone.tvshow.service.api;
 
 import com.imdbclone.tvshow.dto.TVShowWithGenreDTO;
-import com.imdbclone.tvshow.entity.TVShow;
 import com.imdbclone.tvshow.web.response.TVShowResponse;
 import com.imdbclone.tvshow.web.request.TVShowRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,9 +16,9 @@ public interface ITVShowService {
 
     void addTVShow(TVShowRequest tvShowRequest);
 
-    UUID uploadTVShows(Long adminId, MultipartFile tvShowsCsvFile);
+    UUID uploadTVShows(MultipartFile tvShowsCsvFile);
 
-    TVShow updateTVShowById(Long id, TVShowRequest tvShowRequest);
+    TVShowResponse updateTVShowById(Long id, TVShowRequest tvShowRequest);
 
     void deleteTVShowById(Long id);
 }

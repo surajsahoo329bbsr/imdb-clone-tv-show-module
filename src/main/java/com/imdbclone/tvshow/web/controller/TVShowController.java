@@ -2,7 +2,6 @@ package com.imdbclone.tvshow.web.controller;
 
 import com.imdbclone.tvshow.annotation.SetRequestAttributes;
 import com.imdbclone.tvshow.dto.TVShowWithGenreDTO;
-import com.imdbclone.tvshow.entity.TVShow;
 import com.imdbclone.tvshow.service.api.ITVShowService;
 import com.imdbclone.tvshow.web.request.TVShowRequest;
 import com.imdbclone.tvshow.web.response.TVShowResponse;
@@ -49,9 +48,9 @@ public class TVShowController {
 
     @SetRequestAttributes
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(path = "/upload/{adminId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> uploadTVShows(@PathVariable(name = "adminId") Long adminId, @RequestParam("file") MultipartFile tvShowsCsvFile) {
-        UUID uploadId = tvShowService.uploadTVShows(adminId, tvShowsCsvFile);
+    @PostMapping(path = "/upload", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> uploadTVShows(@RequestParam("file") MultipartFile tvShowsCsvFile) {
+        UUID uploadId = tvShowService.uploadTVShows(tvShowsCsvFile);
         return new ResponseEntity<>(uploadId, HttpStatus.ACCEPTED);
     }
 
@@ -59,8 +58,8 @@ public class TVShowController {
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateTVShowById(@PathVariable(name = "id") Long id, @RequestBody TVShowRequest tvShowRequest) {
-        TVShow tvShow = tvShowService.updateTVShowById(id, tvShowRequest);
-        return new ResponseEntity<>(tvShow, HttpStatus.ACCEPTED);
+        TVShowResponse tvShowResponse = tvShowService.updateTVShowById(id, tvShowRequest);
+        return new ResponseEntity<>(tvShowResponse, HttpStatus.ACCEPTED);
     }
 
     @SetRequestAttributes

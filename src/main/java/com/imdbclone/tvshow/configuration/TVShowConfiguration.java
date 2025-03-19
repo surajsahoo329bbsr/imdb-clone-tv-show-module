@@ -47,16 +47,6 @@ public class TVShowConfiguration<T> {
         return new JWTServiceImpl(adminServiceClient, passwordEncoder(), jwtSecretKey, username, email, hashedPassword);
     }
 
-    /*@Bean
-    public GlobalExceptionHandler globalExceptionHandler(IAppLogService appLogService, JWTUtils jwtUtils, HttpServletRequest httpServletRequest) {
-        return new GlobalExceptionHandler(appLogService, jwtUtils, httpServletRequest);
-    }
-
-    @Bean
-    public RequestAttributeAspect requestAttributeAspect(HttpServletRequest httpServletRequest) {
-        return new RequestAttributeAspect(httpServletRequest);
-    }*/
-
     @Bean
     public IAppLogService appLogService(AppLogRepository appLogRepository) {
         return new AppLogServiceImpl(appLogRepository);

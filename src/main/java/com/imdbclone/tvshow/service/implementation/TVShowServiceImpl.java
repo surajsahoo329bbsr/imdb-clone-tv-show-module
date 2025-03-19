@@ -131,7 +131,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
                 .posterUrl(tvShowRequest.getPosterUrl())
                 .description(tvShowRequest.getDescription())
                 .status(tvShowRequest.isStatus())
-                .createdBy(tvShowRequest.getAdminId())
+                .createdBy(jwtUtils.getAdminIdFromJwt())
                 .createdAt(LocalDateTime.now())
                 .build();
         tvShowRepository.save(tvShow);
@@ -139,7 +139,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
 
     @Override
     @Transactional
-    public UUID uploadTVShows(Long adminId, MultipartFile tvShowsCsvFile) {
+    public UUID uploadTVShows(MultipartFile tvShowsCsvFile) {
         // Save list of movies
 
         return csvProcessor.processCsv(
@@ -153,7 +153,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
                         .posterUrl(record.get("posterUrl"))
                         .description(record.get("description"))
                         .status(Boolean.parseBoolean(record.get("status")))
-                        .createdBy(adminId)
+                        .createdBy(jwtUtils.getAdminIdFromJwt())
                         .createdAt(LocalDateTime.now())
                         .build()
                 ,
@@ -163,7 +163,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
 
     @Override
     @Transactional
-    public TVShow updateTVShowById(Long id, TVShowRequest tvShowRequest) {
+    public TVShowResponse updateTVShowById(Long id, TVShowRequest tvShowRequest) {
         TVShow tvShow = tvShowRepository.findById(id)
                 .filter(tv -> !tv.isDeleted()) // Skip deleted TV shows
                 .orElseThrow(() -> new EntityNotFoundException("TV Show not found with ID: " + id));
@@ -181,14 +181,33 @@ public class TVShowServiceImpl<T> implements ITVShowService {
                 .ifPresent(tvShow::setPosterUrl);
         Optional.ofNullable(tvShowRequest.getDescription())
                 .ifPresent(tvShow::setDescription);
-        Optional.ofNullable(tvShowRequest.getAdminId())
+        Optional.ofNullable(jwtUtils.getAdminIdFromJwt())
                 .ifPresent(tvShow::setUpdatedBy);
         Optional.of(tvShowRequest.isStatus())
                 .ifPresent(tvShow::setStatus);
-
         tvShow.setUpdatedAt(LocalDateTime.now());
 
-        return tvShowRepository.save(tvShow);
+        tvShowRepository.save(tvShow);
+
+        List<TVShowGenre> tvShowGenres = tvShowGenreRepository.findTVShowGenreByShowId(id);
+        List<Long> genreIds = tvShowGenres.stream().map(TVShowGenre::getGenreId).toList();
+        Map<Long, String> genres = adminServiceClient.getGenreNamesById(genreIds);
+
+        List<String> genreList = tvShowGenres.stream()
+                .map(t -> genres.getOrDefault(t.getGenreId(), "Unknown"))
+                .toList();
+
+        return TVShowResponse.builder()
+                .id(id)
+                .title(tvShow.getTitle())
+                .releaseYear(tvShow.getReleaseYear())
+                .language(tvShow.getLanguage())
+                .seasonsCount(tvShow.getSeasonsCount())
+                .posterUrl(tvShow.getPosterUrl())
+                .description(tvShow.getDescription())
+                .status(tvShow.isStatus())
+                .genres(genreList)
+                .build();
     }
 
     @Override

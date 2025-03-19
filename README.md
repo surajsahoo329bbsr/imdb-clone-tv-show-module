@@ -4,14 +4,14 @@
 
 ### TV Shows
 
-| HTTP Method | Endpoint                     | Description                            | Access Level | Request Body | Response         |
-|-------------|------------------------------|----------------------------------------| ------------ | ------------ | ---------------- |
-| **GET**     | `/tv-shows`                  | Retrieve all TV shows using pagination | Public       | None         | List of TV shows |
-| **GET**     | `/tv-shows/{id}`             | Retrieve a specific TV show by ID      | Public       | None         | TV show details  |
-| **POST**    | `/tv-shows`                  | Create a new TV show                   | Admin Only   | TV show data | Created TV show  |
-| **POST**    | `/tv-shows/upload/{adminId}` | Uploads a list of TV shows using CSV   | Admin Only   | CSV file     | Status message   |
-| **PATCH**   | `/tv-shows/{id}`             | Update a TV show                       | Admin Only   | TV show data | Updated TV show  |
-| **DELETE**  | `/tv-shows/{id}`             | Soft delete a TV show                  | Admin Only   | None         | Status message   |
+| HTTP Method | Endpoint                    | Description                            | Access Level | Request Body | Response         |
+|-------------|-----------------------------|----------------------------------------| ------------ | ------------ | ---------------- |
+| **GET**     | `/tv-shows`                 | Retrieve all TV shows using pagination | Public       | None         | List of TV shows |
+| **GET**     | `/tv-shows/{id}`            | Retrieve a specific TV show by ID      | Public       | None         | TV show details  |
+| **POST**    | `/tv-shows`                 | Create a new TV show                   | Admin Only   | TV show data | Created TV show  |
+| **POST**    | `/tv-shows/upload` | Uploads a list of TV shows using CSV   | Admin Only   | CSV file     | Status message   |
+| **PATCH**   | `/tv-shows/{id}`            | Update a TV show                       | Admin Only   | TV show data | Updated TV show  |
+| **DELETE**  | `/tv-shows/{id}`            | Soft delete a TV show                  | Admin Only   | None         | Status message   |
 
 ### TV Show Cast
 
