@@ -78,23 +78,23 @@ public class TVShowConfiguration<T> {
     }
 
     @Bean
-    public ITVShowService tvShowService(TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository, CSVProcessor<T> csvProcessor, @Qualifier("adminServiceClientImpl") AdminServiceClient adminServiceClient) {
-        return new TVShowServiceImpl<>(tvShowRepository, tvShowGenreRepository, csvProcessor, adminServiceClient);
+    public ITVShowService tvShowService(TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository, CSVProcessor<T> csvProcessor, @Qualifier("adminServiceClientImpl") AdminServiceClient adminServiceClient, JWTUtils jwtUtils) {
+        return new TVShowServiceImpl<>(tvShowRepository, tvShowGenreRepository, csvProcessor, adminServiceClient, jwtUtils);
     }
 
     @Bean
-    public ITVShowCastService tvShowCastService(TVShowCastRepository tvShowCastRepository, @Qualifier("adminServiceClientImpl") UserServiceClient userServiceClient) {
-        return new TVShowCastServiceImpl(tvShowCastRepository, userServiceClient);
+    public ITVShowCastService tvShowCastService(TVShowCastRepository tvShowCastRepository, @Qualifier("adminServiceClientImpl") UserServiceClient userServiceClient, JWTUtils jwtUtils) {
+        return new TVShowCastServiceImpl(tvShowCastRepository, userServiceClient, jwtUtils);
     }
 
     @Bean
-    public ITVShowSeasonService tvShowSeasonService(TVShowSeasonRepository tvShowSeasonRepository, TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository, @Qualifier("adminServiceClientImpl") AdminServiceClient adminServiceClient) {
-        return new TVShowSeasonServiceImpl(tvShowSeasonRepository, tvShowRepository, tvShowGenreRepository, adminServiceClient);
+    public ITVShowSeasonService tvShowSeasonService(TVShowSeasonRepository tvShowSeasonRepository, TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository, @Qualifier("adminServiceClientImpl") AdminServiceClient adminServiceClient, JWTUtils jwtUtils) {
+        return new TVShowSeasonServiceImpl(tvShowSeasonRepository, tvShowRepository, tvShowGenreRepository, adminServiceClient, jwtUtils);
     }
 
     @Bean
-    public ITVShowEpisodeService tvShowEpisodeService(TVShowEpisodeRepository tvShowEpisodeRepository, TVShowSeasonRepository tvShowSeasonRepository) {
-        return new TVShowEpisodeServiceImpl(tvShowEpisodeRepository, tvShowSeasonRepository);
+    public ITVShowEpisodeService tvShowEpisodeService(TVShowEpisodeRepository tvShowEpisodeRepository, TVShowSeasonRepository tvShowSeasonRepository, JWTUtils jwtUtils) {
+        return new TVShowEpisodeServiceImpl(tvShowEpisodeRepository, tvShowSeasonRepository, jwtUtils);
     }
 
 }

@@ -15,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import util.JWTUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,12 +27,14 @@ public class TVShowSeasonServiceImpl implements ITVShowSeasonService {
     private final TVShowSeasonRepository tvShowSeasonRepository;
     private final TVShowGenreRepository tvShowGenreRepository;
     private final AdminServiceClient adminServiceClient;
+    private final JWTUtils jwtUtils;
 
-    public TVShowSeasonServiceImpl(TVShowSeasonRepository tvShowSeasonRepository, TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository, AdminServiceClient adminServiceClient) {
+    public TVShowSeasonServiceImpl(TVShowSeasonRepository tvShowSeasonRepository, TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository, AdminServiceClient adminServiceClient, JWTUtils jwtUtils) {
         this.tvShowSeasonRepository = tvShowSeasonRepository;
         this.tvShowRepository = tvShowRepository;
         this.tvShowGenreRepository = tvShowGenreRepository;
         this.adminServiceClient = adminServiceClient;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -105,6 +108,8 @@ public class TVShowSeasonServiceImpl implements ITVShowSeasonService {
                 .description(tvShowSeasonRequest.getDescription())
                 .totalEpisodes(tvShowSeasonRequest.getTotalEpisodes())
                 .releaseYear(tvShowSeasonRequest.getReleaseYear())
+                .createdBy(jwtUtils.getAdminIdFromJwt())
+                .createdAt(LocalDateTime.now())
                 .build();
         tvShowSeasonRepository.save(tvShowSeason);
     }
@@ -120,6 +125,8 @@ public class TVShowSeasonServiceImpl implements ITVShowSeasonService {
         tvShowSeason.setDescription(tvShowSeasonRequest.getDescription());
         tvShowSeason.setTotalEpisodes(tvShowSeasonRequest.getTotalEpisodes());
         tvShowSeason.setReleaseYear(tvShowSeason.getReleaseYear());
+        tvShowSeason.setUpdatedBy(jwtUtils.getAdminIdFromJwt());
+        tvShowSeason.setUpdatedAt(LocalDateTime.now());
 
         TVShowSeason updatedSeason = tvShowSeasonRepository.save(tvShowSeason);
 
@@ -141,6 +148,7 @@ public class TVShowSeasonServiceImpl implements ITVShowSeasonService {
 
         tvShowSeason.setDeleted(true);
         tvShowSeason.setDeletedAt(LocalDateTime.now());
+        tvShowSeason.setDeletedBy(jwtUtils.getAdminIdFromJwt());
 
         tvShowSeasonRepository.save(tvShowSeason);
     }

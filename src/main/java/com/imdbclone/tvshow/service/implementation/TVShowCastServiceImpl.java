@@ -8,8 +8,8 @@ import com.imdbclone.tvshow.service.client.UserServiceClient;
 import com.imdbclone.tvshow.web.request.TVShowCastRequest;
 import com.imdbclone.tvshow.web.response.TVShowCastResponse;
 import jakarta.persistence.EntityNotFoundException;
+import util.JWTUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +19,12 @@ public class TVShowCastServiceImpl implements ITVShowCastService {
 
     private final TVShowCastRepository tvShowCastRepository;
     private final UserServiceClient userServiceClient;
+    private final JWTUtils jwtUtils;
 
-    public TVShowCastServiceImpl(TVShowCastRepository tvShowCastRepository, UserServiceClient userServiceClient) {
+    public TVShowCastServiceImpl(TVShowCastRepository tvShowCastRepository, UserServiceClient userServiceClient, JWTUtils jwtUtils) {
         this.tvShowCastRepository = tvShowCastRepository;
         this.userServiceClient = userServiceClient;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -56,22 +58,15 @@ public class TVShowCastServiceImpl implements ITVShowCastService {
                         .seasonNumber(tvShowCastRequest.getSeasonNumber())
                         .characterName(tvShowCastRequest.getCharacterName())
                         .roleType(tvShowCastRequest.getRoleType())
+                        .createdBy(jwtUtils.getAdminIdFromJwt())
+                        .createdAt(LocalDateTime.now())
                         .build();
         tvShowCastRepository.save(tvShowCast);
     }
 
     @Override
     public TVShowCastResponse updateTVShowCast(Long castId, TVShowCastRequest tvShowCastRequest) {
-        TVShowCastPersonDTO tvShowCastPersonDummyDto = TVShowCastPersonDTO
-                .builder()
-                .id(2L)
-                .name("Dummy Name")
-                .dateOfBirth(LocalDate.MAX)
-                .role("Dummy Role")
-                .photoUrl("https://dummyurl.com")
-                .biographyDescription("Dummy Biography")
-                .build();
-
+        TVShowCastPersonDTO tvShowCastPersonDummyDto = userServiceClient.getTVShowCastByPersonId(castId);
         TVShowCast tvShowCast = tvShowCastRepository
                 .findById(castId)
                 .filter(filterTVShowCast -> !filterTVShowCast.isDeleted())
@@ -81,6 +76,8 @@ public class TVShowCastServiceImpl implements ITVShowCastService {
         tvShowCast.setSeasonNumber(tvShowCastRequest.getSeasonNumber());
         tvShowCast.setCharacterName(tvShowCastRequest.getCharacterName());
         tvShowCast.setRoleType(tvShowCastRequest.getRoleType());
+        tvShowCast.setUpdatedAt(LocalDateTime.now());
+        tvShowCast.setUpdatedBy(jwtUtils.getAdminIdFromJwt());
 
         TVShowCast updatedCast = tvShowCastRepository.save(tvShowCast);
 
@@ -102,6 +99,7 @@ public class TVShowCastServiceImpl implements ITVShowCastService {
 
         tvShowCast.setDeleted(true);
         tvShowCast.setDeletedAt(LocalDateTime.now());
+        tvShowCast.setDeletedBy(jwtUtils.getAdminIdFromJwt());
 
         tvShowCastRepository.save(tvShowCast);
     }

@@ -62,4 +62,16 @@ public class UserServiceClientImpl implements UserServiceClient {
                         .build()
         );
     }
+
+    @Override
+    public TVShowCastPersonDTO getTVShowCastByPersonId(Long personId) {
+        return TVShowCastPersonDTO.builder()
+                .id(1L)
+                .name("John Doe")
+                .dateOfBirth(LocalDate.of(1985, 5, 15))
+                .role("Lead Actor")
+                .photoUrl("https://example.com/photos/john_doe.jpg")
+                .biographyDescription("John is an experienced actor known for his roles in action films.")
+                .build();
+    }
 }

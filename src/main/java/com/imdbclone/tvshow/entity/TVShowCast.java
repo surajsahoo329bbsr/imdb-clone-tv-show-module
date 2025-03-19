@@ -5,14 +5,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "tv_show_cast")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 public class TVShowCast extends Milestone {
 
     @Id
@@ -36,6 +37,4 @@ public class TVShowCast extends Milestone {
     private String characterName;
 
     private String roleType;
-
-    private boolean isDeleted = false;
 }

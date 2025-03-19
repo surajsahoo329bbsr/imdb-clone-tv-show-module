@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import util.JWTUtils;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -31,12 +32,14 @@ public class TVShowServiceImpl<T> implements ITVShowService {
     private final TVShowGenreRepository tvShowGenreRepository;
     private final CSVProcessor<T> csvProcessor;
     private final AdminServiceClient adminServiceClient;
+    private final JWTUtils jwtUtils;
 
-    public TVShowServiceImpl(TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository, CSVProcessor<T> csvProcessor, AdminServiceClient adminServiceClient) {
+    public TVShowServiceImpl(TVShowRepository tvShowRepository, TVShowGenreRepository tvShowGenreRepository, CSVProcessor<T> csvProcessor, AdminServiceClient adminServiceClient, JWTUtils jwtUtils) {
         this.tvShowRepository = tvShowRepository;
         this.tvShowGenreRepository = tvShowGenreRepository;
         this.csvProcessor = csvProcessor;
         this.adminServiceClient = adminServiceClient;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -128,7 +131,8 @@ public class TVShowServiceImpl<T> implements ITVShowService {
                 .posterUrl(tvShowRequest.getPosterUrl())
                 .description(tvShowRequest.getDescription())
                 .status(tvShowRequest.isStatus())
-                .adminId(tvShowRequest.getAdminId())
+                .createdBy(tvShowRequest.getAdminId())
+                .createdAt(LocalDateTime.now())
                 .build();
         tvShowRepository.save(tvShow);
     }
@@ -137,9 +141,11 @@ public class TVShowServiceImpl<T> implements ITVShowService {
     @Transactional
     public UUID uploadTVShows(Long adminId, MultipartFile tvShowsCsvFile) {
         // Save list of movies
+
         return csvProcessor.processCsv(
                 tvShowsCsvFile,
-                record -> TVShow.builder()
+                record -> TVShow
+                        .builder()
                         .title(record.get("title"))
                         .releaseYear(LocalDateTime.parse(record.get("releaseYear")))
                         .language(record.get("language"))
@@ -147,8 +153,10 @@ public class TVShowServiceImpl<T> implements ITVShowService {
                         .posterUrl(record.get("posterUrl"))
                         .description(record.get("description"))
                         .status(Boolean.parseBoolean(record.get("status")))
-                        .adminId(adminId)
-                        .build(),
+                        .createdBy(adminId)
+                        .createdAt(LocalDateTime.now())
+                        .build()
+                ,
                 tvShowRepository::saveAll // Save list of movies
         );
     }
@@ -174,9 +182,11 @@ public class TVShowServiceImpl<T> implements ITVShowService {
         Optional.ofNullable(tvShowRequest.getDescription())
                 .ifPresent(tvShow::setDescription);
         Optional.ofNullable(tvShowRequest.getAdminId())
-                .ifPresent(tvShow::setAdminId);
+                .ifPresent(tvShow::setUpdatedBy);
         Optional.of(tvShowRequest.isStatus())
                 .ifPresent(tvShow::setStatus);
+
+        tvShow.setUpdatedAt(LocalDateTime.now());
 
         return tvShowRepository.save(tvShow);
     }
@@ -190,6 +200,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
 
         tvShow.setDeleted(true);
         tvShow.setDeletedAt(LocalDateTime.now());
+        tvShow.setDeletedBy(jwtUtils.getAdminIdFromJwt());
 
         tvShowRepository.save(tvShow);
     }

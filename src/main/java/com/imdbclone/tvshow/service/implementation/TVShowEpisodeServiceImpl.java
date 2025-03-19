@@ -13,6 +13,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import util.JWTUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,10 +22,12 @@ public class TVShowEpisodeServiceImpl implements ITVShowEpisodeService {
 
     private final TVShowEpisodeRepository tvShowEpisodeRepository;
     private final TVShowSeasonRepository tvShowSeasonRepository;
+    private final JWTUtils jwtUtils;
 
-    public TVShowEpisodeServiceImpl(TVShowEpisodeRepository tvShowEpisodeRepository, TVShowSeasonRepository tvShowSeasonRepository) {
+    public TVShowEpisodeServiceImpl(TVShowEpisodeRepository tvShowEpisodeRepository, TVShowSeasonRepository tvShowSeasonRepository, JWTUtils jwtUtils) {
         this.tvShowEpisodeRepository = tvShowEpisodeRepository;
         this.tvShowSeasonRepository = tvShowSeasonRepository;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -95,6 +98,8 @@ public class TVShowEpisodeServiceImpl implements ITVShowEpisodeService {
                 .duration(tvShowEpisodeRequest.getDuration())
                 .releaseDate(tvShowEpisodeRequest.getReleaseDate())
                 .score(tvShowEpisodeRequest.getScore())
+                .createdBy(jwtUtils.getAdminIdFromJwt())
+                .createdAt(LocalDateTime.now())
                 .build();
         tvShowEpisodeRepository.save(tvShowEpisode);
     }
@@ -113,6 +118,8 @@ public class TVShowEpisodeServiceImpl implements ITVShowEpisodeService {
         tvShowEpisode.setDuration(tvShowEpisodeRequest.getDuration());
         tvShowEpisode.setReleaseDate(tvShowEpisodeRequest.getReleaseDate());
         tvShowEpisode.setScore(tvShowEpisodeRequest.getScore());
+        tvShowEpisode.setUpdatedBy(jwtUtils.getAdminIdFromJwt());
+        tvShowEpisode.setUpdatedAt(LocalDateTime.now());
 
         TVShowEpisode updatedEpisode = tvShowEpisodeRepository.save(tvShowEpisode);
 
@@ -136,6 +143,7 @@ public class TVShowEpisodeServiceImpl implements ITVShowEpisodeService {
 
         tvShowEpisode.setDeleted(true);
         tvShowEpisode.setDeletedAt(LocalDateTime.now());
+        tvShowEpisode.setDeletedBy(jwtUtils.getAdminIdFromJwt());
 
         tvShowEpisodeRepository.save(tvShowEpisode);
 

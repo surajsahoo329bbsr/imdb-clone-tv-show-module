@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "tv_show_episode")
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TVShowEpisode extends Milestone {
@@ -43,6 +44,4 @@ public class TVShowEpisode extends Milestone {
     @Min(value = 1, message = "TV Show Episode's minimum score cannot be less than 1.0")
     @Max(value = 10, message = "TV Show Episode's minimum score cannot be more than 10.0")
     private Float score;
-
-    private boolean isDeleted = false;
 }

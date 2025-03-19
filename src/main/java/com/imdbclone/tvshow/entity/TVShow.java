@@ -3,6 +3,7 @@ package com.imdbclone.tvshow.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class TVShow extends Milestone {
 
     @Id
@@ -48,10 +49,4 @@ public class TVShow extends Milestone {
     @Min(value = 1, message = "TV Show's minimum score cannot be less than 1.0")
     @Max(value = 10, message = "TV Show's minimum score cannot be more than 10.0")
     private Float score;
-
-    @Column(nullable = false)
-    @NotNull(message = "TV Show's Admin ID cannot be blank")
-    private Long adminId;
-
-    private boolean isDeleted = false;
 }

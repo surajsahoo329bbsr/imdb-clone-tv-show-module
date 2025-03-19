@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "tv_show_season")
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TVShowSeason extends Milestone {
@@ -38,6 +39,4 @@ public class TVShowSeason extends Milestone {
     @Column(nullable = false)
     @NotNull(message = "TV Show Season's release year cannot be blank")
     private LocalDateTime releaseYear;
-
-    private boolean isDeleted = false;
 }
