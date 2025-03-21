@@ -49,7 +49,7 @@ public class TVShowServiceImpl<T> implements ITVShowService {
             Sort sort = sortByLatestFirst ? Sort.by("id").descending() :
                     Sort.by("id").ascending();
             Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
-            Page<Object[]> page = tvShowRepository.findTVShowsWithGenreById(pageable);
+            Page<Object[]> page = tvShowRepository.findTVShowsWithGenres(pageable);
 
             List<Long> genreIds = page.stream()
                     .flatMap(tv -> Arrays.stream(((String) tv[2]).split(","))

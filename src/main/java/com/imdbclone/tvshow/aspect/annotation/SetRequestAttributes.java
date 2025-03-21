@@ -1,4 +1,4 @@
-package com.imdbclone.tvshow.annotation;
+package com.imdbclone.tvshow.aspect.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

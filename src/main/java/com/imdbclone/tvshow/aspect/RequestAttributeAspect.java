@@ -21,7 +21,7 @@ public class RequestAttributeAspect {
         this.httpServletRequest = httpServletRequest;
     }
 
-    @Around("@annotation(com.imdbclone.tvshow.annotation.SetRequestAttributes)")
+    @Around("@annotation(com.imdbclone.tvshow.aspect.annotation.SetRequestAttributes)")
     public Object setRequestAttributes(ProceedingJoinPoint joinPoint) throws Throwable {
         try {
             String serviceName = joinPoint.getTarget().getClass().getSimpleName().replaceAll("$$.*", "");

@@ -28,5 +28,5 @@ public interface TVShowRepository extends PagingAndSortingRepository<TVShow, Lon
                  WHERE tv.is_deleted = false
                  GROUP BY tv.id
             """, nativeQuery = true)
-    Page<Object[]> findTVShowsWithGenreById(Pageable pageable);
+    Page<Object[]> findTVShowsWithGenres(Pageable pageable);
 }

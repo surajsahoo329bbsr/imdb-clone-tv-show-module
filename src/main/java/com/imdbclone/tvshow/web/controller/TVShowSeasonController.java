@@ -1,6 +1,6 @@
 package com.imdbclone.tvshow.web.controller;
 
-import com.imdbclone.tvshow.annotation.SetRequestAttributes;
+import com.imdbclone.tvshow.aspect.annotation.SetRequestAttributes;
 import com.imdbclone.tvshow.service.api.ITVShowSeasonService;
 import com.imdbclone.tvshow.web.request.TVShowSeasonRequest;
 import com.imdbclone.tvshow.web.response.TVShowSeasonResponse;

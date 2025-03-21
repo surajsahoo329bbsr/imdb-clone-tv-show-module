@@ -1,6 +1,6 @@
 package com.imdbclone.tvshow.web.controller;
 
-import com.imdbclone.tvshow.annotation.SetRequestAttributes;
+import com.imdbclone.tvshow.aspect.annotation.SetRequestAttributes;
 import com.imdbclone.tvshow.service.api.IJWTService;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
