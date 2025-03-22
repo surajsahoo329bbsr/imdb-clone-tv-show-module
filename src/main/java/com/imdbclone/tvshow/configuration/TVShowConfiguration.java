@@ -6,8 +6,6 @@ import com.imdbclone.tvshow.repository.*;
 import com.imdbclone.tvshow.service.api.*;
 import com.imdbclone.tvshow.service.client.AdminServiceClient;
 import com.imdbclone.tvshow.service.client.UserServiceClient;
-import com.imdbclone.tvshow.service.implementation.AdminServiceClientImpl;
-import com.imdbclone.tvshow.service.implementation.UserServiceClientImpl;
 import com.imdbclone.tvshow.service.implementation.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import util.JWTUtils;
+import com.imdbclone.tvshow.util.JWTUtils;
 
 @Configuration
 public class TVShowConfiguration<T> {

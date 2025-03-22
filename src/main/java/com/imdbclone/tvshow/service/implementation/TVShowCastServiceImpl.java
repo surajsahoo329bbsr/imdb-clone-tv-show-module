@@ -8,7 +8,7 @@ import com.imdbclone.tvshow.service.client.UserServiceClient;
 import com.imdbclone.tvshow.web.request.TVShowCastRequest;
 import com.imdbclone.tvshow.web.response.TVShowCastResponse;
 import jakarta.persistence.EntityNotFoundException;
-import util.JWTUtils;
+import com.imdbclone.tvshow.util.JWTUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;

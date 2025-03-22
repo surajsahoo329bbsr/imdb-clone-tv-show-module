@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import util.JWTUtils;
+import com.imdbclone.tvshow.util.JWTUtils;
 
 import java.util.Optional;
 

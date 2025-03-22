@@ -41,3 +41,9 @@ eureka:
 logging:
   level:
     root: info
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +27,12 @@ public class CSVProcessor<T> {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(5);
 
+    private final ProgressWebSocketHandler progressWebSocketHandler;
+
     @Autowired
-    private ProgressWebSocketHandler progressWebSocketHandler;
+    public CSVProcessor(ProgressWebSocketHandler progressWebSocketHandler) {
+        this.progressWebSocketHandler = progressWebSocketHandler;
+    }
 
     @Transactional
     public <E> UUID processCsv(MultipartFile multipartFile, Function<CSVRecord, E> mapper, Consumer<List<E>> saveFunction) {
@@ -83,7 +86,7 @@ public class CSVProcessor<T> {
     }
 
     @Transactional
-    private void updateProgress(UUID uploadId, int processed, int total) throws IOException {
+    private void updateProgress(UUID uploadId, int processed, int total) {
         int percentage = (int) ((processed * 100.0) / total);
         AtomicInteger uploadPercentage = new AtomicInteger(percentage);
         progressWebSocketHandler.sendProgressUpdate(uploadId, uploadPercentage);

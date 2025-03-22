@@ -20,7 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import util.JWTUtils;
+import com.imdbclone.tvshow.util.JWTUtils;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

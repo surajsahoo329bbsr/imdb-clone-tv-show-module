@@ -13,7 +13,7 @@ public class AdminServiceClientImpl implements AdminServiceClient {
 
     @Override
     public Boolean isAdminValid(Long adminId) {
-        return true;
+        return adminId != null;
     }
 
     @Override
@@ -43,6 +43,8 @@ public class AdminServiceClientImpl implements AdminServiceClient {
 
     @Override
     public Long authenticateAdminAndFetchId(String username, String email, String password) {
-        return 1L;
+        if (username != null || email != null)
+            return 1L;
+        return 0L;
     }
 }

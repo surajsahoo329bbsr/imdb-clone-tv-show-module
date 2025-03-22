@@ -25,6 +25,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.GET, "/tv-shows/**", "/admin/**", "/ws/**").permitAll()
                         .requestMatchers("/tv-shows/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

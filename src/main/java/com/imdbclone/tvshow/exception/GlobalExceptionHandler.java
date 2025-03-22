@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import util.JWTUtils;
+import com.imdbclone.tvshow.util.JWTUtils;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -48,6 +48,7 @@ public class GlobalExceptionHandler {
         if (exception instanceof EntityNotFoundException) {
             status = HttpStatus.NOT_FOUND;
         }
+
         String serviceName = (String) httpServletRequest.getAttribute("serviceName");
         Long entityId = (Long) httpServletRequest.getAttribute("entityId");
         String serviceMethod = (String) httpServletRequest.getAttribute("serviceMethod");

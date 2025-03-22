@@ -15,7 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import util.JWTUtils;
+import com.imdbclone.tvshow.util.JWTUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
