@@ -5,9 +5,9 @@ spring:
     max-wait: 10000
     min-active: 5
     test-on-borrow: true
-    url: ${DEV_DATABASE_URL}
-    username: ${DEV_DATABASE_USERNAME}
-    password: "${DEV_DATABASE_PWD}"
+    url: ${DEV_DB_URL}
+    username: ${DEV_DB_CONNECTION_USERNAME}
+    password: "${DEV_DB_CONNECTION_PWD}"
     validationQuery: SELECT 1
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
