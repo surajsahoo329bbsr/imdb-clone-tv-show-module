@@ -71,7 +71,7 @@ public class TVShowConfiguration<T> {
     }
 
     @Bean
-    public ITVShowCastService tvShowCastService(TVShowCastRepository tvShowCastRepository, @Qualifier("adminServiceClientImpl") UserServiceClient userServiceClient, JWTUtils jwtUtils) {
+    public ITVShowCastService tvShowCastService(TVShowCastRepository tvShowCastRepository, @Qualifier("userServiceClientImpl") UserServiceClient userServiceClient, JWTUtils jwtUtils) {
         return new TVShowCastServiceImpl(tvShowCastRepository, userServiceClient, jwtUtils);
     }
 

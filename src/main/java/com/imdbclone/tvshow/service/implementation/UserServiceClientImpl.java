@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@Qualifier("adminServiceClientImpl")
+@Qualifier("userServiceClientImpl")
 public class UserServiceClientImpl implements UserServiceClient {
 
     @Override
