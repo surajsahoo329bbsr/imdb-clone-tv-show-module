@@ -26,7 +26,6 @@ public class JWTUtils {
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken) && authentication.getCredentials() != null) {
             jwtToken = authentication.getCredentials().toString();
         }
-
         if (jwtToken != null) {
             return extractAdminIdFromJwt(jwtToken);
         }
